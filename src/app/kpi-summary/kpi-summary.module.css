@@ -1940,6 +1940,11 @@
     font-size: 13px;
   }
 
+  .kpiCardsGrid {
+    grid-template-columns: repeat(4, 1fr); /* Keep same 4-column layout */
+    gap: 14px;
+  }
+
   .kpiCard {
     padding: 18px;
   }
@@ -2154,11 +2159,11 @@
 @media (max-width: 1440px) {
   /* Per Region responsive adjustments for medium laptops - same as Live Sessions */
   .perRegionLeft {
-    width: 35%;
+    width: 40%; /* Keep same layout */
   }
 
   .perRegionRight {
-    width: 65%;
+    width: 60%; /* Keep same layout */
   }
 
   .perRegionRight .mapContainerWrapper {
@@ -2451,7 +2456,8 @@
   }
 
   .kpiCardsGrid {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr); /* Keep same 4-column layout */
+    gap: 12px;
   }
 
   .kpiCard {
@@ -2476,12 +2482,12 @@
   }
 
   .twoColumnRow {
-    grid-template-columns: 1fr;
-    gap: 24px;
+    grid-template-columns: 1fr 1fr; /* Keep same 2-column layout */
+    gap: 20px;
   }
 
   .twoColumnRow .kpiCardsGrid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, 1fr); /* Keep same 2-column layout */
   }
 
   .perVpnContent {
@@ -2546,11 +2552,11 @@
   }
 
   .perRegionLeft {
-    width: 35%;
+    width: 40%; /* Keep same layout */
   }
 
   .perRegionRight {
-    width: 65%;
+    width: 60%; /* Keep same layout */
   }
 
   .perRegionRight .mapContainerWrapper {
@@ -2865,7 +2871,7 @@
   }
 
   .kpiCardsGrid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(4, 1fr); /* Keep same 4-column layout */
     gap: 12px;
   }
 
@@ -3005,7 +3011,7 @@
   }
 
   .liveSessionsRow {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(4, 1fr); /* Keep same 4-column layout */
     gap: 12px;
     padding: 20px;
   }
