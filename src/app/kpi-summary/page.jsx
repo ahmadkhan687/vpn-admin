@@ -1144,18 +1144,12 @@ const KPISummary = () => {
                                       'rgba(249, 115, 22, 1)', // Orange
                                       'rgba(239, 68, 68, 1)', // Red
                                     ]}
-                                    arcWidth={0.1}
+                                    arcWidth={0.15}
                                     needleColor="#1e40af"
                                     textColor="#ffffff"
                                     hideText={true}
                                     animate={true}
                                   />
-                                  <div className={styles.gaugeIcon}>
-                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z" fill="#1e40af"/>
-                                      <circle cx="12" cy="12" r="3" fill="#ffffff"/>
-                                    </svg>
-                                  </div>
                                 </div>
                               </div>
                             </div>
@@ -1165,7 +1159,7 @@ const KPISummary = () => {
                         {/* What Changed Card */}
                         <div className={styles.whatChangedCard}>
                           <div className={styles.whatChangedHeader}>
-                            <img src="/icons/bell.png" alt="Alert" width="20" height="20" />
+                            <img src="/icons/Alert.png" alt="Alert" width="20" height="20" />
                             <h3 className={styles.whatChangedTitle}>What Changed:</h3>
                           </div>
                           <p className={styles.whatChangedText}>
