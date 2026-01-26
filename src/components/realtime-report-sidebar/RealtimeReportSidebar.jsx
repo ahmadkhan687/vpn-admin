@@ -13,6 +13,8 @@ const RealtimeReportSidebar = () => {
     costAndUnitEconomics: false,
     capacityAndScaling: false,
     growthAndProductPerformance: false,
+    networkHealth: false,
+    protocolAndTrafficMix: false,
   })
   const [isMobile, setIsMobile] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
@@ -76,7 +78,18 @@ const RealtimeReportSidebar = () => {
     {
       id: 'networkProtocol',
       title: 'Network & Protocol Health',
-      items: ['Network Health', 'Protocol and Traffic Mix'],
+      items: [
+        {
+          id: 'networkHealth',
+          name: 'Network Health',
+          subItems: ['Network Overview', 'Reliability & Failures', 'Performance & Quality'],
+        },
+        {
+          id: 'protocolAndTrafficMix',
+          name: 'Protocol and Traffic Mix',
+          subItems: ['Overview', 'Session Behavior', 'Connection Stability'],
+        },
+      ],
     },
     {
       id: 'compliance',
@@ -167,10 +180,9 @@ const RealtimeReportSidebar = () => {
                           </div>
                         )
                       }
-                      // Regular item (string)
+                      // Regular item (string) - no chevron since it's not expandable
                       return (
                         <a key={index} href="#" className={styles.sectionItem}>
-                          <span className={styles.itemChevron}>▶</span>
                           <span className={styles.itemText}>{item}</span>
                         </a>
                       )
