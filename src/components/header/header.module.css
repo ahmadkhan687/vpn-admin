@@ -1,0 +1,474 @@
+.header {
+  height: 70px;
+  background: linear-gradient(90deg, rgba(17, 24, 39, 1) 0%, rgba(37, 52, 83, 1) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 32px;
+  position: fixed;
+  top: 0;
+  left: 240px;
+  right: 0;
+  z-index: 999;
+  transition: left 0.3s ease;
+}
+
+.headerKPISummary {
+  left: 350px;
+}
+
+.left {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.titleSection {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #ffffff;
+  font-family: var(--dashboard-fontFamily);
+  margin: 0;
+  line-height: 1.2;
+}
+
+.subtitle {
+  font-size: 13px;
+  color: #cbd5e1;
+  font-family: var(--dashboard-fontFamily);
+  margin: 0;
+  font-weight: 400;
+}
+
+.right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.scopeSection {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.greenDot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #22c55e;
+  flex-shrink: 0;
+}
+
+.scopeLabel {
+  font-size: 14px;
+  color: #ffffff;
+  font-family: var(--dashboard-fontFamily);
+  font-weight: 500;
+}
+
+.scopeDropdownContainer {
+  position: relative;
+}
+
+.scopeDropdown {
+  background: linear-gradient(135deg, rgba(81, 26, 115, 1) 0%, rgba(153, 49, 217, 1) 100%);
+  border-radius: 8px;
+  padding: 8px 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  user-select: none;
+}
+
+.scopeDropdown:hover {
+  background: linear-gradient(135deg, rgba(91, 36, 125, 1) 0%, rgba(163, 59, 227, 1) 100%);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+.scopeValue {
+  font-size: 14px;
+  color: #ffffff;
+  font-family: var(--dashboard-fontFamily);
+  font-weight: 500;
+  min-width: 80px;
+}
+
+.dropdownIcon {
+  font-size: 10px;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  transition: transform 0.2s ease;
+}
+
+.dropdownMenu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  background: #ffffff;
+  border-radius: 8px;
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  min-width: 140px;
+  z-index: 1000;
+  overflow: hidden;
+  border: 1px solid #e5e7eb;
+}
+
+.dropdownItem {
+  padding: 10px 16px;
+  font-size: 14px;
+  color: #1a1a1a;
+  font-family: var(--dashboard-fontFamily);
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.dropdownItem:hover {
+  background: #f3f4f6;
+}
+
+.dropdownItem.active {
+  background: #eff6ff;
+  color: #3b82f6;
+  font-weight: 500;
+}
+
+.userProfile {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  padding: 8px 12px;
+  border-radius: 8px;
+  transition: background 0.2s ease;
+}
+
+.userProfile:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #e5e7eb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.avatarPlaceholder {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #3b82f6, #10b981);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 600;
+  font-size: 16px;
+  font-family: var(--dashboard-fontFamily);
+}
+
+.userInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.userName {
+  font-family: var(--dashboard-fontFamily);
+  font-size: 14px;
+  color: #ffffff;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+.userHandle {
+  font-family: var(--dashboard-fontFamily);
+  font-size: 12px;
+  color: #cbd5e1;
+  font-weight: 400;
+  line-height: 1.2;
+}
+
+.userDropdown {
+  font-size: 10px;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .header {
+    left: 70px; /* Account for collapsed sidebar */
+    padding: 0 10px;
+    height: 45px;
+    min-height: 45px;
+    flex-wrap: nowrap;
+  }
+
+  .headerKPISummary {
+    left: 70px; /* Account for collapsed sidebar on KPI summary */
+  }
+
+  .left {
+    flex: 1;
+    min-width: 0;
+    gap: 8px;
+  }
+
+  .title {
+    font-size: 12px;
+    line-height: 1.2;
+    font-weight: 600;
+  }
+
+  .subtitle {
+    font-size: 9px;
+  }
+
+  .titleSection {
+    gap: 2px;
+  }
+
+  .right {
+    flex-shrink: 0;
+    justify-content: flex-end;
+    gap: 8px;
+  }
+
+  .scopeSection {
+    gap: 5px;
+    flex-wrap: wrap;
+  }
+
+  .scopeLabel {
+    font-size: 10px;
+  }
+
+  .scopeDropdown {
+    padding: 4px 7px;
+    border-radius: 5px;
+    gap: 4px;
+  }
+
+  .scopeValue {
+    font-size: 10px;
+    min-width: 55px;
+  }
+
+  .dropdownIcon {
+    font-size: 8px;
+  }
+
+  .greenDot {
+    width: 6px;
+    height: 6px;
+  }
+
+  .userInfo {
+    display: none;
+  }
+
+  .avatar {
+    width: 28px;
+    height: 28px;
+  }
+
+  .avatarPlaceholder {
+    font-size: 10px;
+  }
+
+  .userDropdown {
+    display: none;
+  }
+
+  .dropdownMenu {
+    min-width: 110px;
+    border-radius: 5px;
+  }
+
+  .dropdownItem {
+    padding: 7px 11px;
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 480px) {
+  .header {
+    left: 60px; /* Account for collapsed sidebar */
+    padding: 0 8px;
+    height: 40px;
+    min-height: 40px;
+    flex-wrap: nowrap;
+  }
+
+  .headerKPISummary {
+    left: 60px; /* Account for collapsed sidebar on KPI summary */
+  }
+
+  .left {
+    flex: 1;
+    min-width: 0;
+    gap: 6px;
+  }
+
+  .title {
+    font-size: 11px;
+    line-height: 1.2;
+    font-weight: 600;
+  }
+
+  .subtitle {
+    font-size: 8px;
+  }
+
+  .titleSection {
+    gap: 2px;
+  }
+
+  .right {
+    flex-shrink: 0;
+    justify-content: flex-end;
+    gap: 6px;
+  }
+
+  .scopeSection {
+    gap: 4px;
+  }
+
+  .scopeLabel {
+    font-size: 9px;
+  }
+
+  .scopeDropdown {
+    padding: 3px 6px;
+    border-radius: 4px;
+    gap: 3px;
+  }
+
+  .scopeValue {
+    font-size: 9px;
+    min-width: 50px;
+  }
+
+  .dropdownIcon {
+    font-size: 7px;
+  }
+
+  .greenDot {
+    width: 5px;
+    height: 5px;
+  }
+
+  .avatar {
+    width: 24px;
+    height: 24px;
+  }
+
+  .avatarPlaceholder {
+    font-size: 9px;
+  }
+
+  .dropdownMenu {
+    min-width: 100px;
+    border-radius: 4px;
+  }
+
+  .dropdownItem {
+    padding: 6px 9px;
+    font-size: 10px;
+  }
+}
+
+@media (max-width: 360px) {
+  .header {
+    left: 0;
+    padding: 0 6px;
+    height: 35px;
+    min-height: 35px;
+  }
+
+  .left {
+    gap: 5px;
+  }
+
+  .title {
+    font-size: 10px;
+    line-height: 1.2;
+  }
+
+  .subtitle {
+    font-size: 7px;
+  }
+
+  .titleSection {
+    gap: 1px;
+  }
+
+  .right {
+    gap: 5px;
+  }
+
+  .scopeSection {
+    gap: 3px;
+  }
+
+  .scopeLabel {
+    font-size: 8px;
+  }
+
+  .scopeDropdown {
+    padding: 2px 5px;
+    border-radius: 3px;
+    gap: 2px;
+  }
+
+  .scopeValue {
+    font-size: 8px;
+    min-width: 45px;
+  }
+
+  .dropdownIcon {
+    font-size: 6px;
+  }
+
+  .greenDot {
+    width: 4px;
+    height: 4px;
+  }
+
+  .avatar {
+    width: 20px;
+    height: 20px;
+  }
+
+  .avatarPlaceholder {
+    font-size: 8px;
+  }
+
+  .dropdownMenu {
+    min-width: 85px;
+    border-radius: 3px;
+  }
+
+  .dropdownItem {
+    padding: 5px 7px;
+    font-size: 9px;
+  }
+}

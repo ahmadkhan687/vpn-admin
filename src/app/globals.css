@@ -1,0 +1,127 @@
+@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&family=Outfit:wght@100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+:root {
+  --primary: #181818;
+  --secondPrimary: #1e1e1e;
+  --secondary: #299d91;
+  --darksecondary: #db7d00;
+  --secondsecondary: #ffffff;
+  --fontFamily: 'Poppins';
+  --headingFontFamily: 'Outfit';
+  --dashboard-fontFamily: system-ui, -apple-system, BlinkMacSystemFont,
+    'SF Pro Text', 'Inter', sans-serif;
+
+  /* Sidebar dimensions */
+  --sidebar-width: 240px;
+  --sidebar-width-minimized: 95px;
+  --sidebar-transition: 0.35s ease;
+
+  /* Dashboard glassmorphism design system */
+  --bg-gradient: radial-gradient(
+    circle at top left,
+    #1d2b64 0,
+    #020617 45%,
+    #020617 100%
+  );
+  --sidebar-gradient: linear-gradient(
+    180deg,
+    #0ea5e9 0%,
+    #22c55e 40%,
+    #6366f1 100%
+  );
+  --card-glass: linear-gradient(
+    135deg,
+    rgba(15, 23, 42, 0.92),
+    rgba(15, 23, 42, 0.75)
+  );
+  --card-border: rgba(148, 163, 184, 0.35);
+  --card-shadow-soft: 18px 24px 60px rgba(15, 23, 42, 0.85);
+  --card-shadow-neo: -10px -10px 30px rgba(148, 163, 184, 0.16),
+    14px 18px 36px rgba(15, 23, 42, 0.9);
+  --radius-xl: 22px;
+  --radius-lg: 18px;
+  --radius-md: 14px;
+  --transition-fast: 160ms ease-out;
+  --accent: #38bdf8;
+  --accent-soft: rgba(56, 189, 248, 0.18);
+  --dashboard-secondary: #22c55e;
+  --danger: #f97373;
+  --muted: #9ca3af;
+  --text-main: #1a1a1a;
+  --text-soft: #6b7280;
+}
+
+/* Reset and global styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #f5f7fa;
+  color: #1a1a1a;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Utility classes for Dashboard look */
+.glass-card {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: var(--radius-lg);
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  color: var(--text-main);
+}
+
+.glass-tile {
+  background: #ffffff;
+  border-radius: var(--radius-md);
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+}
+
+.btn-primary {
+  background: linear-gradient(
+    135deg,
+    rgba(56, 189, 248, 0.18),
+    rgba(56, 189, 248, 0.12)
+  );
+  color: #e6eefc;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 8px 14px;
+  border-radius: 10px;
+  font-weight: 600;
+}
+
+.dashboard-text {
+  color: var(--text-main) !important;
+  font-family: var(--dashboard-fontFamily) !important;
+}
+
+/* Make images default to visible and not be tinted */
+img {
+  image-rendering: auto;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0 !important;
+  font-family: var(--headingFontFamily), sans-serif;
+  font-weight: 600;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.container {
+  margin: auto;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
