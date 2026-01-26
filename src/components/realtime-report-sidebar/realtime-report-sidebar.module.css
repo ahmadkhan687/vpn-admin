@@ -87,6 +87,10 @@
   background: #f3f4f6;
 }
 
+.section.active .sectionHeader {
+  background: #eff6ff;
+}
+
 .sectionTitle {
   font-size: 14px;
   font-weight: 500;
@@ -127,11 +131,49 @@
   font-family: var(--dashboard-fontFamily);
   transition: background-color 0.2s ease, color 0.2s ease;
   border-radius: 4px;
+  background: none;
+  border: none;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
 }
 
 .sectionItem:hover {
   background: #f3f4f6;
   color: #1a1a1a;
+}
+
+.nestedItemContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.subItemsContainer {
+  display: flex;
+  flex-direction: column;
+  padding-left: 24px;
+  margin-top: 4px;
+}
+
+.subItem {
+  display: flex;
+  align-items: center;
+  padding: 6px 16px;
+  color: #6b7280;
+  text-decoration: none;
+  font-size: 12px;
+  font-family: var(--dashboard-fontFamily);
+  transition: background-color 0.2s ease, color 0.2s ease;
+  border-radius: 4px;
+}
+
+.subItem:hover {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+.subItemText {
+  flex: 1;
 }
 
 .itemChevron {
@@ -193,6 +235,112 @@
   }
   to {
     opacity: 1;
+  }
+}
+
+/* Small Laptop Styles */
+@media (max-width: 1366px) {
+  .realtimeSidebar {
+    width: 240px;
+  }
+
+  .sidebarTitle {
+    font-size: 16px;
+  }
+
+  .sectionTitle {
+    font-size: 13px;
+  }
+
+  .sectionHeader {
+    padding: 10px 12px;
+  }
+
+  .sectionItem {
+    font-size: 12px;
+    padding: 7px 12px;
+  }
+
+  .subItem {
+    font-size: 11px;
+    padding: 5px 12px;
+  }
+
+  .itemChevron {
+    font-size: 9px;
+  }
+}
+
+@media (max-width: 1280px) {
+  .realtimeSidebar {
+    width: 220px;
+  }
+
+  .sidebarTitle {
+    font-size: 15px;
+  }
+
+  .sectionTitle {
+    font-size: 12px;
+  }
+
+  .sectionHeader {
+    padding: 9px 10px;
+  }
+
+  .sectionItem {
+    font-size: 11px;
+    padding: 6px 10px;
+  }
+
+  .subItem {
+    font-size: 10px;
+    padding: 4px 10px;
+  }
+
+  .subItemsContainer {
+    padding-left: 20px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .realtimeSidebar {
+    width: 200px;
+  }
+
+  .sidebarHeader {
+    padding: 0 16px;
+    margin-bottom: 20px;
+  }
+
+  .sidebarTitle {
+    font-size: 14px;
+  }
+
+  .sectionTitle {
+    font-size: 11px;
+  }
+
+  .sectionHeader {
+    padding: 8px 10px;
+  }
+
+  .sectionItem {
+    font-size: 10px;
+    padding: 6px 8px;
+  }
+
+  .subItem {
+    font-size: 9px;
+    padding: 4px 8px;
+  }
+
+  .subItemsContainer {
+    padding-left: 16px;
+  }
+
+  .sectionsContainer {
+    padding: 0 8px;
   }
 }
 

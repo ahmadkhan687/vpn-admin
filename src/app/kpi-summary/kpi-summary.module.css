@@ -1895,6 +1895,262 @@
 }
 
 /* Responsive Styles */
+@media (max-width: 1366px) {
+  /* Adjust for narrower sidebar */
+  .withRealtimeSidebar .mainContent {
+    margin-left: 310px; /* 70px (main sidebar) + 240px (realtime sidebar) */
+    width: calc(100% - 310px);
+  }
+
+  .content {
+    padding: 20px;
+  }
+
+  .tabsContainer {
+    margin-left: 12px;
+  }
+
+  .tab {
+    padding: 8px 20px;
+    font-size: 13px;
+  }
+
+  .subTabsContainer {
+    margin-left: 12px;
+  }
+
+  .subTab {
+    font-size: 13px;
+  }
+
+  .kpiSections {
+    margin-left: 12px;
+  }
+
+  .sectionTitlePill {
+    font-size: 13px;
+    padding: 5px 14px;
+  }
+
+  .viewAllLink {
+    font-size: 13px;
+  }
+
+  .sectionQuestion {
+    font-size: 13px;
+  }
+
+  .kpiCard {
+    padding: 18px;
+  }
+
+  .kpiCardTitle {
+    font-size: 11px;
+  }
+
+  .kpiCardValue {
+    font-size: 28px;
+  }
+
+  .statusText,
+  .trendText {
+    font-size: 11px;
+  }
+
+  .viewBreakdownBtn {
+    font-size: 12px;
+  }
+
+  .perVpnContent {
+    margin-left: 12px;
+  }
+
+  .perVpnGrid {
+    grid-template-columns: 2fr 1fr; /* Keep same layout */
+    gap: 20px;
+  }
+
+  .statusCard {
+    padding: 20px;
+  }
+
+  .statusCardContent {
+    grid-template-columns: 1fr auto 1fr; /* Keep same layout */
+    gap: 20px;
+  }
+
+  .statusLabel,
+  .statusValue {
+    font-size: 15px;
+  }
+
+  .kpiInfoLine {
+    font-size: 13px;
+  }
+
+  .vpnLogoCircle {
+    width: 50px;
+    height: 50px;
+    font-size: 22px;
+  }
+
+  .vpnScope {
+    font-size: 11px;
+  }
+
+  .gaugeContainer {
+    width: 200px;
+  }
+
+  .graphCard {
+    padding: 20px;
+  }
+
+  .graphTitle {
+    font-size: 15px;
+  }
+
+  .whatChangedCard {
+    padding: 18px;
+  }
+
+  .whatChangedTitle {
+    font-size: 15px;
+  }
+
+  .whatChangedText {
+    font-size: 13px;
+  }
+
+  .comparisonBar {
+    padding: 14px 18px;
+  }
+
+  .comparisonVPNPill {
+    font-size: 12px;
+    padding: 5px 10px;
+  }
+
+  .addComparisonButton {
+    font-size: 13px;
+    padding: 7px 14px;
+  }
+
+  /* Per Region adjustments */
+  .regionDropdownLabel {
+    font-size: 12px;
+  }
+
+  .regionDropdown {
+    font-size: 12px;
+    padding: 8px 12px;
+  }
+
+  .topRegionsTitle {
+    font-size: 14px;
+  }
+
+  .regionCity {
+    font-size: 12px;
+  }
+
+  .regionValue {
+    font-size: 12px;
+  }
+
+  /* Live Sessions adjustments */
+  .liveSessionValue {
+    font-size: 28px;
+  }
+
+  .liveSessionTitle {
+    font-size: 13px;
+  }
+
+  .liveByVpnTitle {
+    font-size: 16px;
+  }
+
+  .liveByVpnNumber {
+    font-size: 28px;
+  }
+
+  .liveByVpnUnit {
+    font-size: 18px;
+  }
+
+  .liveByVpnTotalLabel {
+    font-size: 13px;
+  }
+
+  .liveByVpnItemName {
+    font-size: 13px;
+  }
+
+  .liveByVpnItemValue {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 1280px) {
+  /* Adjust for narrower sidebar */
+  .withRealtimeSidebar .mainContent {
+    margin-left: 290px; /* 70px (main sidebar) + 220px (realtime sidebar) */
+    width: calc(100% - 290px);
+  }
+
+  .content {
+    padding: 18px;
+  }
+
+  .tab {
+    padding: 8px 18px;
+    font-size: 12px;
+  }
+
+  .subTab {
+    font-size: 12px;
+  }
+
+  .sectionTitlePill {
+    font-size: 12px;
+    padding: 5px 12px;
+  }
+
+  .viewAllLink {
+    font-size: 12px;
+  }
+
+  .sectionQuestion {
+    font-size: 12px;
+  }
+
+  .kpiCard {
+    padding: 16px;
+  }
+
+  .kpiCardValue {
+    font-size: 26px;
+  }
+
+  .statusLabel,
+  .statusValue {
+    font-size: 14px;
+  }
+
+  .graphTitle {
+    font-size: 14px;
+  }
+
+  .whatChangedTitle {
+    font-size: 14px;
+  }
+
+  .comparisonBar {
+    padding: 12px 16px;
+  }
+}
+
 @media (max-width: 1440px) {
   /* Per Region responsive adjustments for medium laptops - same as Live Sessions */
   .perRegionLeft {
@@ -2150,8 +2406,73 @@
 }
 
 @media (max-width: 1280px) {
+  /* Adjust for narrower sidebar */
+  .withRealtimeSidebar .mainContent {
+    margin-left: 290px; /* 70px (main sidebar) + 220px (realtime sidebar) */
+    width: calc(100% - 290px);
+  }
+
+  .content {
+    padding: 18px;
+  }
+
+  .tabsContainer {
+    margin-left: 10px;
+  }
+
+  .tab {
+    padding: 8px 18px;
+    font-size: 12px;
+  }
+
+  .subTabsContainer {
+    margin-left: 10px;
+  }
+
+  .subTab {
+    font-size: 12px;
+  }
+
+  .kpiSections {
+    margin-left: 10px;
+  }
+
+  .sectionTitlePill {
+    font-size: 12px;
+    padding: 5px 12px;
+  }
+
+  .viewAllLink {
+    font-size: 12px;
+  }
+
+  .sectionQuestion {
+    font-size: 12px;
+  }
+
   .kpiCardsGrid {
     grid-template-columns: repeat(3, 1fr);
+  }
+
+  .kpiCard {
+    padding: 16px;
+  }
+
+  .kpiCardTitle {
+    font-size: 11px;
+  }
+
+  .kpiCardValue {
+    font-size: 26px;
+  }
+
+  .statusText,
+  .trendText {
+    font-size: 11px;
+  }
+
+  .viewBreakdownBtn {
+    font-size: 12px;
   }
 
   .twoColumnRow {
@@ -2163,17 +2484,65 @@
     grid-template-columns: repeat(2, 1fr);
   }
 
+  .perVpnContent {
+    margin-left: 10px;
+  }
+
   .perVpnGrid {
-    grid-template-columns: 1fr;
+    grid-template-columns: 2fr 1fr; /* Keep same layout */
+    gap: 18px;
+  }
+
+  .statusCard {
+    padding: 18px;
   }
 
   .statusCardContent {
-    grid-template-columns: 1fr;
-    gap: 20px;
+    grid-template-columns: 1fr auto 1fr; /* Keep same layout */
+    gap: 18px;
   }
 
-  .statusCardCenter {
-    order: -1;
+  .statusLabel,
+  .statusValue {
+    font-size: 14px;
+  }
+
+  .kpiInfoLine {
+    font-size: 12px;
+  }
+
+  .vpnLogoCircle {
+    width: 48px;
+    height: 48px;
+    font-size: 20px;
+  }
+
+  .vpnScope {
+    font-size: 11px;
+  }
+
+  .gaugeContainer {
+    width: 180px;
+  }
+
+  .graphCard {
+    padding: 18px;
+  }
+
+  .graphTitle {
+    font-size: 14px;
+  }
+
+  .whatChangedCard {
+    padding: 16px;
+  }
+
+  .whatChangedTitle {
+    font-size: 14px;
+  }
+
+  .whatChangedText {
+    font-size: 12px;
   }
 
   .perRegionLeft {
@@ -2280,22 +2649,201 @@
     font-size: 12px;
     padding: 6px 10px;
   }
+
+  /* Live Sessions adjustments */
+  .liveSessionValue {
+    font-size: 26px;
+  }
+
+  .liveSessionTitle {
+    font-size: 12px;
+  }
+
+  .liveByVpnTitle {
+    font-size: 15px;
+  }
+
+  .liveByVpnNumber {
+    font-size: 24px;
+  }
+
+  .liveByVpnUnit {
+    font-size: 15px;
+  }
+
+  .liveByVpnTotalLabel {
+    font-size: 12px;
+  }
+
+  .liveByVpnItemName {
+    font-size: 12px;
+  }
+
+  .liveByVpnItemValue {
+    font-size: 12px;
+  }
+
+  .liveSessionsRow {
+    padding: 20px;
+  }
 }
 
 @media (max-width: 1024px) {
+  /* Adjust for narrower sidebar on small laptops */
+  .withRealtimeSidebar .mainContent {
+    margin-left: 270px; /* 70px (main sidebar) + 200px (realtime sidebar) */
+    width: calc(100% - 270px);
+  }
+
   .mainContent {
     margin-left: 70px; /* Account for collapsed sidebar */
     width: calc(100% - 70px);
   }
 
-  .withRealtimeSidebar .mainContent {
-    margin-left: 70px; /* On mobile, RealtimeReportSidebar overlays, so main content stays at 70px */
-    width: calc(100% - 70px);
-  }
-
   .content {
     margin-top: 45px; /* Account for smaller header on mobile */
-    padding: 20px;
+    padding: 16px;
+  }
+
+  .tab {
+    padding: 7px 16px;
+    font-size: 11px;
+  }
+
+  .subTab {
+    font-size: 11px;
+  }
+
+  .sectionTitlePill {
+    font-size: 11px;
+    padding: 4px 10px;
+  }
+
+  .viewAllLink {
+    font-size: 11px;
+  }
+
+  .sectionQuestion {
+    font-size: 11px;
+  }
+
+  .kpiCard {
+    padding: 14px;
+  }
+
+  .kpiCardTitle {
+    font-size: 10px;
+  }
+
+  .kpiCardValue {
+    font-size: 24px;
+  }
+
+  .statusText,
+  .trendText {
+    font-size: 10px;
+  }
+
+  .viewBreakdownBtn {
+    font-size: 11px;
+  }
+
+  .perVpnContent {
+    margin-left: 8px;
+  }
+
+  .perVpnGrid {
+    grid-template-columns: 2fr 1fr; /* Keep same layout */
+    gap: 16px;
+  }
+
+  .statusCard {
+    padding: 16px;
+  }
+
+  .statusCardContent {
+    grid-template-columns: 1fr auto 1fr; /* Keep same layout */
+    gap: 16px;
+  }
+
+  .statusLabel,
+  .statusValue {
+    font-size: 13px;
+  }
+
+  .kpiInfoLine {
+    font-size: 12px;
+  }
+
+  .vpnLogoCircle {
+    width: 44px;
+    height: 44px;
+    font-size: 18px;
+  }
+
+  .vpnScope {
+    font-size: 10px;
+  }
+
+  .gaugeContainer {
+    width: 160px;
+  }
+
+  .graphCard {
+    padding: 16px;
+  }
+
+  .graphTitle {
+    font-size: 13px;
+  }
+
+  .whatChangedCard {
+    padding: 16px;
+  }
+
+  .whatChangedTitle {
+    font-size: 13px;
+  }
+
+  .whatChangedText {
+    font-size: 12px;
+  }
+
+  .regionDropdownLabel {
+    font-size: 11px;
+  }
+
+  .regionDropdown {
+    font-size: 11px;
+    padding: 8px 10px;
+  }
+
+  .topRegionsTitle {
+    font-size: 13px;
+  }
+
+  .regionCity {
+    font-size: 11px;
+  }
+
+  .liveSessionValue {
+    font-size: 26px;
+  }
+
+  .liveSessionTitle {
+    font-size: 12px;
+  }
+
+  .liveByVpnTitle {
+    font-size: 15px;
+  }
+
+  .liveByVpnNumber {
+    font-size: 26px;
+  }
+
+  .liveByVpnUnit {
+    font-size: 15px;
   }
 
   .tabsContainer {

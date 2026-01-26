@@ -6,8 +6,13 @@ import styles from './realtime-report-sidebar.module.css'
 const RealtimeReportSidebar = () => {
   const [expandedSections, setExpandedSections] = useState({
     businessObjectives: true,
-    networkProtocol: true,
-    compliance: true,
+    networkProtocol: false,
+    compliance: false,
+  })
+  const [expandedSubItems, setExpandedSubItems] = useState({
+    costAndUnitEconomics: false,
+    capacityAndScaling: false,
+    growthAndProductPerformance: false,
   })
   const [isMobile, setIsMobile] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
@@ -35,6 +40,13 @@ const RealtimeReportSidebar = () => {
     }))
   }
 
+  const toggleSubItem = (subItem) => {
+    setExpandedSubItems((prev) => ({
+      ...prev,
+      [subItem]: !prev[subItem],
+    }))
+  }
+
   const toggleSidebar = () => {
     setIsOpen(!isOpen)
   }
@@ -44,9 +56,21 @@ const RealtimeReportSidebar = () => {
       id: 'businessObjectives',
       title: 'Business Objectives',
       items: [
-        'Cost and Unit Economics',
-        'Capacity and Scaling',
-        'Growth and Product Performance',
+        {
+          id: 'costAndUnitEconomics',
+          name: 'Cost and Unit Economics',
+          subItems: ['Cost Efficiency', 'Cost Distribution'],
+        },
+        {
+          id: 'capacityAndScaling',
+          name: 'Capacity and Scaling',
+          subItems: ['Current Capacity', 'Load & Demand', 'Infrastructure Distribution'],
+        },
+        {
+          id: 'growthAndProductPerformance',
+          name: 'Growth and Product Performance',
+          subItems: ['Acquisition', 'Engagement', 'Conversion', 'Retention'],
+        },
       ],
     },
     {
@@ -101,7 +125,7 @@ const RealtimeReportSidebar = () => {
           </div>
           <div className={styles.sectionsContainer}>
             {sections.map((section) => (
-              <div key={section.id} className={styles.section}>
+              <div key={section.id} className={`${styles.section} ${expandedSections[section.id] ? styles.active : ''}`}>
                 <button
                   className={styles.sectionHeader}
                   onClick={() => toggleSection(section.id)}
@@ -117,12 +141,40 @@ const RealtimeReportSidebar = () => {
                 </button>
                 {expandedSections[section.id] && (
                   <div className={styles.sectionItems}>
-                    {section.items.map((item, index) => (
-                      <a key={index} href="#" className={styles.sectionItem}>
-                        <span className={styles.itemChevron}>▶</span>
-                        <span className={styles.itemText}>{item}</span>
-                      </a>
-                    ))}
+                    {section.items.map((item, index) => {
+                      // Check if item has subItems (nested structure)
+                      if (typeof item === 'object' && item.subItems) {
+                        return (
+                          <div key={index} className={styles.nestedItemContainer}>
+                            <button
+                              className={styles.sectionItem}
+                              onClick={() => toggleSubItem(item.id)}
+                            >
+                              <span className={styles.itemChevron}>
+                                {expandedSubItems[item.id] ? '▼' : '▶'}
+                              </span>
+                              <span className={styles.itemText}>{item.name}</span>
+                            </button>
+                            {expandedSubItems[item.id] && (
+                              <div className={styles.subItemsContainer}>
+                                {item.subItems.map((subItem, subIndex) => (
+                                  <a key={subIndex} href="#" className={styles.subItem}>
+                                    <span className={styles.subItemText}>{subItem}</span>
+                                  </a>
+                                ))}
+                              </div>
+                            )}
+                          </div>
+                        )
+                      }
+                      // Regular item (string)
+                      return (
+                        <a key={index} href="#" className={styles.sectionItem}>
+                          <span className={styles.itemChevron}>▶</span>
+                          <span className={styles.itemText}>{item}</span>
+                        </a>
+                      )
+                    })}
                   </div>
                 )}
               </div>
