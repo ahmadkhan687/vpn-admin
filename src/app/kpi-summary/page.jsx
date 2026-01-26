@@ -1475,6 +1475,18 @@ const KPISummary = () => {
                       ref={mapRef}
                       className={styles.mapContainerWrapper}
                     >
+                      {/* VPN Logo Section - Top Right */}
+                      <div className={styles.mapScope}>
+                        <div className={styles.mapVPNLogo}>
+                          <div className={styles.mapVPNLogoCircle}>
+                            {selectedVPN.charAt(0)}
+                          </div>
+                        </div>
+                        <div className={styles.mapScopeText}>
+                          {selectedVPN}
+                        </div>
+                      </div>
+
                       {tooltipContent && (
                         <div
                           style={{
