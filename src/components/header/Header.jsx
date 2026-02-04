@@ -13,7 +13,9 @@ const Header = ({ dropdownOptions = [], defaultValue, onValueChange }) => {
                                  pathname === '/current-capacity' ||
                                  pathname === '/load-demand' ||
                                  pathname === '/infrastructure-distribution' ||
-                                 pathname === '/acquisition'
+                                 pathname === '/acquisition' ||
+                                 pathname?.startsWith('/acquisition/') ||
+                                 pathname === '/engagement'
   const [selectedValue, setSelectedValue] = useState(
     defaultValue || (dropdownOptions.length > 0 ? dropdownOptions[0] : '')
   )

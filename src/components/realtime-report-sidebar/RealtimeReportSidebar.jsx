@@ -33,7 +33,7 @@ const RealtimeReportSidebar = () => {
       sections.businessObjectives = true
       subItems.capacityAndScaling = true
     }
-    if (pathname === '/acquisition') {
+    if (pathname === '/acquisition' || pathname?.startsWith('/acquisition/')) {
       sections.businessObjectives = true
       subItems.growthAndProductPerformance = true
     }
@@ -115,7 +115,7 @@ const RealtimeReportSidebar = () => {
           name: 'Growth and Product Performance',
           subItems: [
             { name: 'Acquisition', path: '/acquisition' },
-            { name: 'Engagement', path: '#' },
+            { name: 'Engagement', path: '/engagement' },
             { name: 'Conversion', path: '#' },
             { name: 'Retention', path: '#' },
           ],

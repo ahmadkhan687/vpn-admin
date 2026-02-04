@@ -19,7 +19,9 @@ const Sidebar = () => {
                              pathname === '/current-capacity' ||
                              pathname === '/load-demand' ||
                              pathname === '/infrastructure-distribution' ||
-                             pathname === '/acquisition'
+                             pathname === '/acquisition' ||
+                             pathname?.startsWith('/acquisition/') ||
+                             pathname === '/engagement'
 
   const menuItems = [
     { name: 'Home', path: '/dashboard', icon: '/icons/Home.png' },

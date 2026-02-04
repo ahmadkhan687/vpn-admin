@@ -434,3 +434,478 @@
 .devicesLegendValue {
   color: #6b7280;
 }
+
+/* Users Per Subscription + Monitored Users section */
+.subscriptionCard {
+  flex: 6 1 0;
+  min-width: 0;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.subscriptionHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.subscriptionHeaderLeft {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.subscriptionLabel {
+  display: block;
+  font-size: 12px;
+  color: #6b7280;
+  font-family: var(--dashboard-fontFamily);
+  margin-bottom: 2px;
+}
+
+.subscriptionTitle {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a1a1a;
+  font-family: var(--dashboard-fontFamily);
+  margin: 0;
+}
+
+.subscriptionRefreshBtn {
+  padding: 6px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: #6b7280;
+  border-radius: 6px;
+}
+
+.subscriptionRefreshBtn:hover {
+  color: #374151;
+  background: #f3f4f6;
+}
+
+.subscriptionMetric {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.subscriptionUsersCount {
+  font-size: 24px;
+  font-weight: 600;
+  color: #1a1a1a;
+  font-family: var(--dashboard-fontFamily);
+}
+
+.subscriptionPeriod {
+  font-size: 13px;
+  color: #6b7280;
+  font-family: var(--dashboard-fontFamily);
+}
+
+.subscriptionDropdownWrap {
+  position: relative;
+  display: inline-block;
+}
+
+.subscriptionDropdownTrigger {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  background: #fff;
+  cursor: pointer;
+  font-family: var(--dashboard-fontFamily);
+  font-size: 14px;
+  color: #1a1a1a;
+}
+
+.subscriptionDropdownTrigger:hover {
+  border-color: #d1d5db;
+}
+
+.subscriptionDropdownArrow {
+  font-size: 10px;
+  color: #6b7280;
+}
+
+.subscriptionDropdown {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  min-width: 160px;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+  overflow: hidden;
+}
+
+.subscriptionDropdownOption {
+  display: block;
+  width: 100%;
+  padding: 12px 16px;
+  border: none;
+  background: none;
+  text-align: left;
+  font-family: var(--dashboard-fontFamily);
+  font-size: 14px;
+  color: #1a1a1a;
+  cursor: pointer;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.subscriptionDropdownOption:last-child {
+  border-bottom: none;
+}
+
+.subscriptionDropdownOption:hover {
+  background: #f9fafb;
+}
+
+.subscriptionChartWrap {
+  flex: 1;
+  min-height: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.subscriptionBarChart {
+  display: block;
+  min-width: 100%;
+  height: 180px;
+}
+
+.subscriptionBarAxisLabel {
+  font-size: 11px;
+  fill: #6b7280;
+  font-family: var(--dashboard-fontFamily);
+}
+
+.monitoredCard {
+  flex: 4 1 0;
+  min-width: 0;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.monitoredHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 8px;
+  border-bottom: 2px dotted #d1d5db;
+}
+
+.monitoredHeaderLeft {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.monitoredTitle {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a1a1a;
+  font-family: var(--dashboard-fontFamily);
+  margin: 0;
+}
+
+.monitoredDropdownWrap {
+  position: relative;
+  display: inline-block;
+}
+
+.monitoredDropdownTrigger {
+  padding: 2px 6px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: #6b7280;
+  font-size: 12px;
+}
+
+.monitoredDropdownTrigger:hover {
+  color: #374151;
+}
+
+.monitoredDropdownArrow {
+  display: inline-block;
+}
+
+.monitoredDropdown {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  min-width: 160px;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+  overflow: hidden;
+}
+
+.monitoredDropdownOption {
+  display: block;
+  width: 100%;
+  padding: 12px 16px;
+  border: none;
+  background: none;
+  text-align: left;
+  font-family: var(--dashboard-fontFamily);
+  font-size: 14px;
+  color: #1a1a1a;
+  cursor: pointer;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.monitoredDropdownOption:last-child {
+  border-bottom: none;
+}
+
+.monitoredDropdownOption:hover {
+  background: #f9fafb;
+}
+
+.monitoredFilterBtn {
+  padding: 4px 8px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: #6b7280;
+}
+
+.monitoredFilterBtn:hover {
+  color: #374151;
+}
+
+.monitoredTableWrap {
+  overflow-x: auto;
+  flex: 1;
+  min-height: 0;
+}
+
+.monitoredTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--dashboard-fontFamily);
+  font-size: 13px;
+}
+
+.monitoredTable th {
+  padding: 10px 12px;
+  font-weight: 600;
+  color: #374151;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.monitoredThLeft { text-align: left; }
+.monitoredThCenter { text-align: center; }
+.monitoredThRight { text-align: right; }
+
+.monitoredTable td {
+  padding: 10px 12px;
+  color: #1a1a1a;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.monitoredTdLeft { text-align: left; }
+.monitoredTdCenter { text-align: center; }
+.monitoredTdRight { text-align: right; }
+
+.monitoredTable tbody tr:hover {
+  background: #f9fafb;
+}
+
+.monitoredViewAll {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #1d4ed8;
+  font-family: var(--dashboard-fontFamily);
+  text-decoration: none;
+}
+
+.monitoredViewAll:hover {
+  text-decoration: underline;
+}
+
+.monitoredViewAllArrow {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+/* All Users table section - full table with Profile/History button */
+.allUsersSection {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  padding: 20px;
+  margin-top: 24px;
+}
+
+.allUsersHeader {
+  margin-bottom: 16px;
+}
+
+.allUsersDropdownWrap {
+  position: relative;
+  display: inline-block;
+}
+
+.allUsersTitleBtn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-family: var(--dashboard-fontFamily);
+  font-size: 18px;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.allUsersTitleBtn:hover {
+  color: #374151;
+}
+
+.allUsersTitleLabel {
+  text-transform: capitalize;
+}
+
+.allUsersTitleArrow {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.allUsersDropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  min-width: 160px;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+  overflow: hidden;
+}
+
+.allUsersDropdownOption {
+  display: block;
+  width: 100%;
+  padding: 12px 16px;
+  border: none;
+  background: none;
+  text-align: left;
+  font-family: var(--dashboard-fontFamily);
+  font-size: 14px;
+  color: #1a1a1a;
+  cursor: pointer;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.allUsersDropdownOption:last-child {
+  border-bottom: none;
+}
+
+.allUsersDropdownOption:hover {
+  background: #f9fafb;
+}
+
+.allUsersTableWrap {
+  overflow-x: auto;
+}
+
+.allUsersTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--dashboard-fontFamily);
+  font-size: 14px;
+}
+
+.allUsersTh {
+  text-align: left;
+  padding: 12px 16px;
+  font-weight: 600;
+  color: #374151;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.allUsersTd {
+  padding: 12px 16px;
+  color: #1a1a1a;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.allUsersTable tbody tr:hover {
+  background: #f9fafb;
+}
+
+.profileHistoryBtn {
+  display: inline-block;
+  padding: 8px 16px;
+  background: #1e40af;
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  font-family: var(--dashboard-fontFamily);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+  text-decoration: none;
+}
+
+.profileHistoryBtn:hover {
+  background: #1d4ed8;
+}
+
+.allUsersFooter {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 16px;
+  padding-top: 12px;
+}
+
+.allUsersViewAll {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #1d4ed8;
+  font-family: var(--dashboard-fontFamily);
+  text-decoration: none;
+}
+
+.allUsersViewAll:hover {
+  text-decoration: underline;
+}
+
+.allUsersViewAllArrow {
+  font-size: 16px;
+}
