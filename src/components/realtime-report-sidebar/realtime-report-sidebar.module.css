@@ -172,6 +172,17 @@
   color: #374151;
 }
 
+.subItemActive {
+  background: #dbeafe;
+  color: #1e40af;
+  font-weight: 500;
+}
+
+.subItemActive:hover {
+  background: #bfdbfe;
+  color: #1e40af;
+}
+
 .subItemText {
   flex: 1;
 }

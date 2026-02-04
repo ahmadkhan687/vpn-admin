@@ -1,21 +1,49 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import styles from './realtime-report-sidebar.module.css'
 
 const RealtimeReportSidebar = () => {
-  const [expandedSections, setExpandedSections] = useState({
-    businessObjectives: true,
-    networkProtocol: false,
-    compliance: false,
-  })
-  const [expandedSubItems, setExpandedSubItems] = useState({
-    costAndUnitEconomics: false,
-    capacityAndScaling: false,
-    growthAndProductPerformance: false,
-    networkHealth: false,
-    protocolAndTrafficMix: false,
-  })
+  const pathname = usePathname()
+  
+  // Determine initial expanded states based on current path
+  const getInitialExpandedStates = () => {
+    const sections = {
+      businessObjectives: true,
+      networkProtocol: false,
+      compliance: false,
+    }
+    
+    const subItems = {
+      costAndUnitEconomics: false,
+      capacityAndScaling: false,
+      growthAndProductPerformance: false,
+      networkHealth: false,
+      protocolAndTrafficMix: false,
+    }
+    
+    // Auto-expand based on current path
+    if (pathname === '/cost-efficiency' || pathname === '/cost-distribution') {
+      sections.businessObjectives = true
+      subItems.costAndUnitEconomics = true
+    }
+    if (pathname === '/current-capacity' || pathname === '/load-demand' || pathname === '/infrastructure-distribution') {
+      sections.businessObjectives = true
+      subItems.capacityAndScaling = true
+    }
+    if (pathname === '/acquisition') {
+      sections.businessObjectives = true
+      subItems.growthAndProductPerformance = true
+    }
+    
+    return { sections, subItems }
+  }
+  
+  const initialStates = getInitialExpandedStates()
+  const [expandedSections, setExpandedSections] = useState(initialStates.sections)
+  const [expandedSubItems, setExpandedSubItems] = useState(initialStates.subItems)
   const [isMobile, setIsMobile] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
 
@@ -34,6 +62,13 @@ const RealtimeReportSidebar = () => {
     window.addEventListener('resize', checkMobile)
     return () => window.removeEventListener('resize', checkMobile)
   }, [])
+  
+  // Update expanded states when pathname changes
+  useEffect(() => {
+    const newStates = getInitialExpandedStates()
+    setExpandedSections(newStates.sections)
+    setExpandedSubItems(newStates.subItems)
+  }, [pathname])
 
   const toggleSection = (section) => {
     setExpandedSections((prev) => ({
@@ -61,17 +96,29 @@ const RealtimeReportSidebar = () => {
         {
           id: 'costAndUnitEconomics',
           name: 'Cost and Unit Economics',
-          subItems: ['Cost Efficiency', 'Cost Distribution'],
+          subItems: [
+            { name: 'Cost Efficiency', path: '/cost-efficiency' },
+            { name: 'Cost Distribution', path: '/cost-distribution' },
+          ],
         },
         {
           id: 'capacityAndScaling',
           name: 'Capacity and Scaling',
-          subItems: ['Current Capacity', 'Load & Demand', 'Infrastructure Distribution'],
+          subItems: [
+            { name: 'Current Capacity', path: '/current-capacity' },
+            { name: 'Load & Demand', path: '/load-demand' },
+            { name: 'Infrastructure Distribution', path: '/infrastructure-distribution' },
+          ],
         },
         {
           id: 'growthAndProductPerformance',
           name: 'Growth and Product Performance',
-          subItems: ['Acquisition', 'Engagement', 'Conversion', 'Retention'],
+          subItems: [
+            { name: 'Acquisition', path: '/acquisition' },
+            { name: 'Engagement', path: '#' },
+            { name: 'Conversion', path: '#' },
+            { name: 'Retention', path: '#' },
+          ],
         },
       ],
     },
@@ -82,12 +129,20 @@ const RealtimeReportSidebar = () => {
         {
           id: 'networkHealth',
           name: 'Network Health',
-          subItems: ['Network Overview', 'Reliability & Failures', 'Performance & Quality'],
+          subItems: [
+            { name: 'Network Overview', path: '#' },
+            { name: 'Reliability & Failures', path: '#' },
+            { name: 'Performance & Quality', path: '#' },
+          ],
         },
         {
           id: 'protocolAndTrafficMix',
           name: 'Protocol and Traffic Mix',
-          subItems: ['Overview', 'Session Behavior', 'Connection Stability'],
+          subItems: [
+            { name: 'Overview', path: '#' },
+            { name: 'Session Behavior', path: '#' },
+            { name: 'Connection Stability', path: '#' },
+          ],
         },
       ],
     },
@@ -171,9 +226,13 @@ const RealtimeReportSidebar = () => {
                             {expandedSubItems[item.id] && (
                               <div className={styles.subItemsContainer}>
                                 {item.subItems.map((subItem, subIndex) => (
-                                  <a key={subIndex} href="#" className={styles.subItem}>
-                                    <span className={styles.subItemText}>{subItem}</span>
-                                  </a>
+                                  <Link 
+                                    key={subIndex} 
+                                    href={subItem.path} 
+                                    className={`${styles.subItem} ${pathname === subItem.path ? styles.subItemActive : ''}`}
+                                  >
+                                    <span className={styles.subItemText}>{subItem.name}</span>
+                                  </Link>
                                 ))}
                               </div>
                             )}

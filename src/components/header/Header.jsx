@@ -6,7 +6,14 @@ import styles from './header.module.css'
 
 const Header = ({ dropdownOptions = [], defaultValue, onValueChange }) => {
   const pathname = usePathname()
-  const isKPISummaryPage = pathname === '/kpi-summary'
+  // Check if current page is KPI Summary or any related page with Realtime Sidebar
+  const isRealtimeSidebarPage = pathname === '/kpi-summary' || 
+                                 pathname === '/cost-efficiency' || 
+                                 pathname === '/cost-distribution' ||
+                                 pathname === '/current-capacity' ||
+                                 pathname === '/load-demand' ||
+                                 pathname === '/infrastructure-distribution' ||
+                                 pathname === '/acquisition'
   const [selectedValue, setSelectedValue] = useState(
     defaultValue || (dropdownOptions.length > 0 ? dropdownOptions[0] : '')
   )
@@ -47,7 +54,7 @@ const Header = ({ dropdownOptions = [], defaultValue, onValueChange }) => {
   }, [isDropdownOpen])
 
   return (
-    <header className={`${styles.header} ${isKPISummaryPage ? styles.headerKPISummary : ''}`}>
+    <header className={`${styles.header} ${isRealtimeSidebarPage ? styles.headerKPISummary : ''}`}>
       <div className={styles.left}>
         <div className={styles.titleSection}>
           <h1 className={styles.title}>
