@@ -33,7 +33,7 @@ const RealtimeReportSidebar = () => {
       sections.businessObjectives = true
       subItems.capacityAndScaling = true
     }
-    if (pathname === '/acquisition' || pathname?.startsWith('/acquisition/')) {
+    if (pathname === '/acquisition' || pathname?.startsWith('/acquisition/') || pathname === '/engagement' || pathname === '/conversion' || pathname === '/retention') {
       sections.businessObjectives = true
       subItems.growthAndProductPerformance = true
     }
@@ -116,8 +116,8 @@ const RealtimeReportSidebar = () => {
           subItems: [
             { name: 'Acquisition', path: '/acquisition' },
             { name: 'Engagement', path: '/engagement' },
-            { name: 'Conversion', path: '#' },
-            { name: 'Retention', path: '#' },
+            { name: 'Conversion', path: '/conversion' },
+            { name: 'Retention', path: '/retention' },
           ],
         },
       ],
@@ -149,7 +149,16 @@ const RealtimeReportSidebar = () => {
     {
       id: 'compliance',
       title: 'Compliance & Governance',
-      items: ['IPDR', 'Retention Compliance'],
+      items: [
+        {
+          name: 'Compliance & Governance',
+          id: 'complianceItems',
+          subItems: [
+            { name: 'IPDR', path: '/ipdr' },
+            { name: 'Retention Compliance', path: '/retention-compliance' },
+          ],
+        },
+      ],
     },
   ]
 
@@ -239,11 +248,22 @@ const RealtimeReportSidebar = () => {
                           </div>
                         )
                       }
-                      // Regular item (string) - no chevron since it's not expandable
+                      // Regular item (string) or simple link object
+                      if (typeof item === 'object' && item.path) {
+                        return (
+                          <Link
+                            key={index}
+                            href={item.path}
+                            className={`${styles.sectionItem} ${pathname === item.path ? styles.subItemActive : ''}`}
+                          >
+                            <span className={styles.itemText}>{item.name}</span>
+                          </Link>
+                        )
+                      }
                       return (
-                        <a key={index} href="#" className={styles.sectionItem}>
-                          <span className={styles.itemText}>{item}</span>
-                        </a>
+                        <div key={index} className={styles.sectionItem}>
+                          <span className={styles.itemText}>{String(item)}</span>
+                        </div>
                       )
                     })}
                   </div>

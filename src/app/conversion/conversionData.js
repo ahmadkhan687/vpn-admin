@@ -1,0 +1,68 @@
+// Conversion KPI data per VPN scope
+// Portfolio = aggregated data across all VPNs (overall)
+
+export const conversionData = {
+  Portfolio: {
+    trialToPaidConversion: '13%',
+    trialUsers: '1,233',
+    paidUsers: '233',
+    avgTimeToConvert: '3-4 days',
+    funnel: { trialStarted: 45, activeTrial: 30, paymentPage: 40, paidUsers: 20 },
+    trendData: [1500, 2200, 3000, 2500, 2800],
+    trendMonths: ['May', 'June', 'July', 'Aug', 'Sept'],
+  },
+  'Steer Lucid': {
+    trialToPaidConversion: '15%',
+    trialUsers: '420',
+    paidUsers: '68',
+    avgTimeToConvert: '3-4 days',
+    funnel: { trialStarted: 38, activeTrial: 25, paymentPage: 32, paidUsers: 18 },
+    trendData: [1200, 1800, 2400, 2000, 2200],
+    trendMonths: ['May', 'June', 'July', 'Aug', 'Sept'],
+  },
+  Crest: {
+    trialToPaidConversion: '11%',
+    trialUsers: '185',
+    paidUsers: '28',
+    avgTimeToConvert: '4-5 days',
+    funnel: { trialStarted: 22, activeTrial: 15, paymentPage: 18, paidUsers: 8 },
+    trendData: [800, 1100, 1400, 1200, 1300],
+    trendMonths: ['May', 'June', 'July', 'Aug', 'Sept'],
+  },
+  Slick: {
+    trialToPaidConversion: '16%',
+    trialUsers: '520',
+    paidUsers: '95',
+    avgTimeToConvert: '2-3 days',
+    funnel: { trialStarted: 52, activeTrial: 38, paymentPage: 45, paidUsers: 22 },
+    trendData: [1800, 2600, 3200, 2800, 3000],
+    trendMonths: ['May', 'June', 'July', 'Aug', 'Sept'],
+  },
+  Fortivo: {
+    trialToPaidConversion: '12%',
+    trialUsers: '298',
+    paidUsers: '55',
+    avgTimeToConvert: '3-4 days',
+    funnel: { trialStarted: 35, activeTrial: 22, paymentPage: 28, paidUsers: 12 },
+    trendData: [1000, 1500, 1900, 1600, 1800],
+    trendMonths: ['May', 'June', 'July', 'Aug', 'Sept'],
+  },
+  Qucik: {
+    trialToPaidConversion: '18%',
+    trialUsers: '680',
+    paidUsers: '112',
+    avgTimeToConvert: '2-3 days',
+    funnel: { trialStarted: 68, activeTrial: 48, paymentPage: 58, paidUsers: 28 },
+    trendData: [2200, 3000, 3800, 3200, 3500],
+    trendMonths: ['May', 'June', 'July', 'Aug', 'Sept'],
+  },
+  Nexipher: {
+    trialToPaidConversion: '9%',
+    trialUsers: '92',
+    paidUsers: '18',
+    avgTimeToConvert: '5-6 days',
+    funnel: { trialStarted: 12, activeTrial: 8, paymentPage: 10, paidUsers: 4 },
+    trendData: [500, 700, 900, 750, 800],
+    trendMonths: ['May', 'June', 'July', 'Aug', 'Sept'],
+  },
+}

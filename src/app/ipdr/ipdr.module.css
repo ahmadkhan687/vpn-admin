@@ -1,0 +1,626 @@
+.dashboardContainer {
+  display: flex;
+  min-height: 100vh;
+  background: #f5f7fa;
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+.mainContent {
+  flex: 1;
+  margin-left: 240px;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  width: calc(100% - 240px);
+  max-width: 100%;
+  box-sizing: border-box;
+  transition: margin-left 0.3s ease, width 0.3s ease;
+}
+
+.withRealtimeSidebar .mainContent {
+  margin-left: 350px;
+  width: calc(100% - 350px);
+}
+
+.content {
+  margin-top: 90px;
+  padding: 24px;
+  flex: 1;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+.pageHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+.pageHeaderLeft {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+}
+
+.titleRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.pageTitle {
+  font-size: 28px;
+  font-weight: 600;
+  color: #1a1a1a;
+  font-family: var(--dashboard-fontFamily);
+  margin: 0;
+}
+
+.titlePillPurple {
+  display: inline-block;
+  padding: 4px 12px;
+  background: #eef2ff;
+  color: #4f46e5;
+  font-size: 13px;
+  font-family: var(--dashboard-fontFamily);
+  border-radius: 9999px;
+  font-weight: 500;
+}
+
+.dottedLine {
+  width: 100%;
+  max-width: 400px;
+  height: 0;
+  border-bottom: 2px dotted #d1d5db;
+  margin: 4px 0;
+}
+
+.pageDescription {
+  font-size: 14px;
+  color: #6b7280;
+  font-family: var(--dashboard-fontFamily);
+  margin: 0;
+  line-height: 1.5;
+}
+
+.pageHeaderRight {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.dateRangeSelector {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  cursor: pointer;
+  color: #374151;
+  font-family: var(--dashboard-fontFamily);
+  font-size: 13px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.dateRangeLabel,
+.dateRangeValue {
+  font-size: 13px;
+}
+
+.dateRangeValue {
+  color: #6b7280;
+}
+
+.dateRangeChevron {
+  font-size: 10px;
+  color: #6b7280;
+  margin-left: 2px;
+}
+
+.dateRangeDropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  min-width: 260px;
+  z-index: 100;
+  overflow: hidden;
+}
+
+.dateRangeOption {
+  padding: 12px 16px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.dateRangeOption:hover {
+  background: #f9fafb;
+}
+
+.dateRangeOptionActive {
+  background: #eff6ff;
+}
+
+.dateRangeOptionLabel {
+  font-size: 14px;
+  font-weight: 500;
+  color: #374151;
+  font-family: var(--dashboard-fontFamily);
+}
+
+.dateRangeOptionRange {
+  font-size: 12px;
+  color: #9ca3af;
+  font-family: var(--dashboard-fontFamily);
+}
+
+/* Top KPI row */
+.kpiRow {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+
+.kpiCard {
+  flex: 1 1 100%;
+  min-width: 220px;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  padding: 28px 20px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  position: relative;
+  align-items: center;
+}
+
+/* Desktop layout: first two compact, third wide */
+@media (min-width: 1024px) {
+  .kpiCard {
+    flex: 0 0 260px;
+  }
+
+  .kpiRow .kpiCard:last-child {
+    flex: 1 1 auto;
+  }
+}
+
+.kpiIconWrap {
+  position: absolute;
+  top: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40px;
+  height: 40px;
+  border-radius: 9999px;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.kpiIcon {
+  width: 20px;
+  height: 20px;
+}
+
+.kpiTitleWrap {
+  text-align: center;
+}
+
+.kpiTitle {
+  font-size: 14px;
+  font-weight: 600;
+  color: #111827;
+  font-family: var(--dashboard-fontFamily);
+  margin: 0;
+}
+
+.kpiTitleDotted {
+  width: 100%;
+  max-width: 140px;
+  height: 0;
+  border-bottom: 2px dotted #d1d5db;
+  margin: 4px auto 0;
+}
+
+.kpiTitleBar {
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.kpiValueRow {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 8px;
+}
+
+.kpiChangeRow {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.kpiArrowPositive {
+  color: #16a34a;
+  font-size: 12px;
+}
+
+.kpiArrowNegative {
+  color: #dc2626;
+  font-size: 12px;
+}
+
+.kpiValue {
+  font-size: 24px;
+  font-weight: 600;
+  color: #111827;
+  font-family: var(--dashboard-fontFamily);
+}
+
+.kpiChangePositive {
+  font-size: 12px;
+  color: #16a34a;
+  font-family: var(--dashboard-fontFamily);
+}
+
+.kpiChangeNegative {
+  font-size: 12px;
+  color: #dc2626;
+  font-family: var(--dashboard-fontFamily);
+}
+
+.kpiSparkline {
+  margin-top: 6px;
+  width: 100%;
+}
+
+.sparklineSvg {
+  width: 100%;
+  height: 40px;
+}
+
+.kpiLastVerified {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  color: #9ca3af;
+  font-family: var(--dashboard-fontFamily);
+  white-space: nowrap;
+}
+
+.kpiLastVerifiedIcon {
+  font-size: 12px;
+}
+
+.kpiAuditContent {
+  width: 100%;
+  display: flex;
+  align-items: flex-end;
+  gap: 16px;
+}
+
+.kpiAuditLeft {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+.kpiAuditSparkline {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Middle row */
+.middleRow {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+
+.accessCard,
+.integrityCard {
+  flex: 1;
+  min-width: 320px;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  padding: 20px;
+}
+
+.accessCardHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.accessTopBar {
+  height: 4px;
+  border-radius: 12px 12px 0 0;
+  background: linear-gradient(to right, #3b82f6, #3b82f6);
+  margin: -20px -20px 12px -20px;
+}
+
+.accessTitleBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.accessTitle {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a1a1a;
+  font-family: var(--dashboard-fontFamily);
+  margin: 0;
+}
+
+.accessValue {
+  font-size: 24px;
+  font-weight: 600;
+  color: #1a1a1a;
+  font-family: var(--dashboard-fontFamily);
+  margin-top: 0;
+}
+
+.accessTabs {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.accessTab {
+  padding: 4px 10px;
+  border-radius: 9999px;
+  border: 1px solid transparent;
+  background: transparent;
+  font-size: 12px;
+  font-family: var(--dashboard-fontFamily);
+  color: #6b7280;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.accessTabActive {
+  background: #e0ebff;
+  color: #1d4ed8;
+  border-color: #bfdbfe;
+}
+
+.accessChart {
+  width: 100%;
+  overflow: hidden;
+}
+
+.accessChartSvg {
+  display: block;
+  width: 100%;
+  height: 200px;
+}
+
+.accessBottomNav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 4px;
+}
+
+.axisLabel {
+  font-size: 11px;
+  fill: #6b7280;
+  font-family: var(--dashboard-fontFamily);
+}
+
+.integrityHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.integrityTitleWrap {
+  display: inline-block;
+}
+
+.integrityTitle {
+  font-size: 16px;
+  font-weight: 600;
+  color: #111827;
+  font-family: var(--dashboard-fontFamily);
+  margin: 0;
+}
+
+.integrityTitleDotted {
+  width: 100%;
+  max-width: 220px;
+  height: 0;
+  border-bottom: 2px dotted #d1d5db;
+  margin-top: 4px;
+}
+
+.integrityUpdated {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: #9ca3af;
+  font-family: var(--dashboard-fontFamily);
+}
+
+.integrityRefresh {
+  font-size: 14px;
+  color: #6b7280;
+}
+
+.integrityUpdatedText {
+  font-weight: 500;
+}
+
+.integrityBody {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.integrityDonutWrap {
+  position: relative;
+  width: 220px;
+  height: 220px;
+}
+
+.integrityCenterText {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+.integrityCenterValue {
+  font-size: 22px;
+  font-weight: 700;
+  color: #111827;
+  font-family: var(--dashboard-fontFamily);
+}
+
+.integrityCenterLabel {
+  font-size: 12px;
+  color: #6b7280;
+  font-family: var(--dashboard-fontFamily);
+}
+
+.integrityLegend {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.integrityLegendItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #374151;
+  font-family: var(--dashboard-fontFamily);
+}
+
+.integrityCheck {
+  font-size: 14px;
+  color: #16a34a;
+}
+
+.integrityLegendValid {
+  font-size: 13px;
+  color: #374151;
+  font-family: var(--dashboard-fontFamily);
+}
+
+.integrityLegendIntact {
+  font-size: 13px;
+  color: #374151;
+  font-family: var(--dashboard-fontFamily);
+}
+
+.integrityLegendIntactValue {
+  font-weight: 700;
+  color: #111827;
+}
+
+/* Logs card */
+.logsCard {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  padding: 20px;
+}
+
+.logsHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.logsTitle {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a1a1a;
+  font-family: var(--dashboard-fontFamily);
+  margin: 0;
+}
+
+.logsSearchWrap {
+  max-width: 260px;
+  width: 100%;
+}
+
+.logsSearch {
+  width: 100%;
+  padding: 8px 12px;
+  border-radius: 9999px;
+  border: 1px solid #e5e7eb;
+  font-size: 13px;
+  font-family: var(--dashboard-fontFamily);
+}
+
+.logsTableWrap {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.logsTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--dashboard-fontFamily);
+  font-size: 13px;
+}
+
+.logsTable th,
+.logsTable td {
+  padding: 10px 12px;
+  text-align: left;
+  border-bottom: 1px solid #f3f4f6;
+  white-space: nowrap;
+}
+
+.logsTable th {
+  font-weight: 600;
+  color: #6b7280;
+  background: #f9fafb;
+}
+
+.logsTable td {
+  color: #374151;
+}
+

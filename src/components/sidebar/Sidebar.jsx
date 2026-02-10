@@ -21,7 +21,11 @@ const Sidebar = () => {
                              pathname === '/infrastructure-distribution' ||
                              pathname === '/acquisition' ||
                              pathname?.startsWith('/acquisition/') ||
-                             pathname === '/engagement'
+                             pathname === '/engagement' ||
+                             pathname === '/conversion' ||
+                             pathname === '/retention' ||
+                             pathname === '/ipdr' ||
+                             pathname === '/retention-compliance'
 
   const menuItems = [
     { name: 'Home', path: '/dashboard', icon: '/icons/Home.png' },

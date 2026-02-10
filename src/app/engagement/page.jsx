@@ -5,31 +5,29 @@ import Link from 'next/link'
 import Sidebar from '@/components/sidebar/Sidebar'
 import RealtimeReportSidebar from '@/components/realtime-report-sidebar/RealtimeReportSidebar'
 import Header from '@/components/header/Header'
+import { engagementData, getSessionsPerUserData } from './engagementData'
 import styles from './engagement.module.css'
 
-const DAU_HOURS = ['9 am', '10 am', '11 am', '12 pm', '1 pm']
-const MAU_MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May']
+// Full 24 hours for Daily Active Users (arrows scroll through these)
+const DAU_HOURS_ALL = ['12 am', '1 am', '2 am', '3 am', '4 am', '5 am', '6 am', '7 am', '8 am', '9 am', '10 am', '11 am', '12 pm', '1 pm', '2 pm', '3 pm', '4 pm', '5 pm', '6 pm', '7 pm', '8 pm', '9 pm', '10 pm', '11 pm']
+const HOURS_WINDOW_SIZE = 5
 
-// Daily Active Users: hourly trend (Y 0–80) — 5 points for 9 am, 10 am, 11 am, 12 pm, 1 pm
-const dauTrendData = [45, 52, 38, 62, 55]
-// Monthly Active Users: monthly trend (Y 0–80)
-const mauTrendData = [12, 18, 15, 22, 20]
-
-// Sessions Per User: categories and counts (matching image ~18, ~20, ~70, ~20, ~8)
-const sessionsPerUserData = [
-  { label: '1', value: 18 },
-  { label: '2-3', value: 20 },
-  { label: '4-6', value: 70 },
-  { label: '7-10', value: 20 },
-  { label: '10+', value: 8 },
-]
+// Full 12 months for Monthly Active Users (arrows scroll through these)
+const MAU_MONTHS_ALL = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+const MONTHS_WINDOW_SIZE = 5
 
 const Engagement = () => {
   const [selectedVPN, setSelectedVPN] = useState('Portfolio')
   const [dateRange, setDateRange] = useState('Last 28 days')
   const [isDateDropdownOpen, setIsDateDropdownOpen] = useState(false)
   const [activeMetricTab, setActiveMetricTab] = useState('dau') // 'dau' | 'mau'
+  const [dauWindowStart, setDauWindowStart] = useState(9) // Start at 9 am (index 9)
+  const [mauWindowStart, setMauWindowStart] = useState(0) // Start at Jan
+  const [chartContainerWidth, setChartContainerWidth] = useState(800)
+  const [sessionsChartWidth, setSessionsChartWidth] = useState(800)
   const dateDropdownRef = useRef(null)
+  const chartContainerRef = useRef(null)
+  const sessionsChartRef = useRef(null)
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -40,6 +38,32 @@ const Engagement = () => {
     document.addEventListener('mousedown', handleClickOutside)
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [isDateDropdownOpen])
+
+  // Measure chart container for full-width graph
+  useEffect(() => {
+    const el = chartContainerRef.current
+    if (!el) return
+    const observer = new ResizeObserver((entries) => {
+      const { width } = entries[0]?.contentRect ?? {}
+      if (width > 0) setChartContainerWidth(width)
+    })
+    observer.observe(el)
+    setChartContainerWidth(el.getBoundingClientRect().width || 800)
+    return () => observer.disconnect()
+  }, [])
+
+  // Measure sessions chart container for full-width bar chart
+  useEffect(() => {
+    const el = sessionsChartRef.current
+    if (!el) return
+    const observer = new ResizeObserver((entries) => {
+      const { width } = entries[0]?.contentRect ?? {}
+      if (width > 0) setSessionsChartWidth(width)
+    })
+    observer.observe(el)
+    setSessionsChartWidth(el.getBoundingClientRect().width || 800)
+    return () => observer.disconnect()
+  }, [])
 
   const scopeOptions = [
     'Portfolio',
@@ -61,18 +85,39 @@ const Engagement = () => {
   const handleVPNChange = (vpn) => setSelectedVPN(vpn)
   const currentDateRange = dateRangeOptions.find((opt) => opt.label === dateRange) || dateRangeOptions[2]
 
-  const dauCount = 233
-  const mauCount = 92
-  const yAxisMax = 80
+  const vpnData = engagementData[selectedVPN] || engagementData.Portfolio
+  const dauCount = vpnData.dau
+  const mauCount = vpnData.mau
+  const dauTrendDataAll = vpnData.dauTrend
+  const mauTrendDataAll = vpnData.mauTrend
+  const sessionsPerUserData = getSessionsPerUserData(selectedVPN)
+  const yAxisMax = Math.max(80, Math.max(...dauTrendDataAll, ...mauTrendDataAll) * 1.1)
   const chartHeight = 220
   const padding = { top: 20, right: 44, bottom: 36, left: 16 }
 
   const isDaily = activeMetricTab === 'dau'
-  const xLabels = isDaily ? DAU_HOURS : MAU_MONTHS
-  const trendData = isDaily ? dauTrendData : mauTrendData
-  const chartInnerWidth = Math.max(400, (xLabels.length - 1) * 60)
-  const chartWidth = chartInnerWidth + padding.left + padding.right
+  const dauMaxStart = Math.max(0, DAU_HOURS_ALL.length - HOURS_WINDOW_SIZE)
+  const mauMaxStart = Math.max(0, MAU_MONTHS_ALL.length - MONTHS_WINDOW_SIZE)
+  const dauStart = Math.min(dauWindowStart, dauMaxStart)
+  const mauStart = Math.min(mauWindowStart, mauMaxStart)
+  const xLabels = isDaily
+    ? DAU_HOURS_ALL.slice(dauStart, dauStart + HOURS_WINDOW_SIZE)
+    : MAU_MONTHS_ALL.slice(mauStart, mauStart + MONTHS_WINDOW_SIZE)
+  const trendData = isDaily
+    ? dauTrendDataAll.slice(dauStart, dauStart + HOURS_WINDOW_SIZE)
+    : mauTrendDataAll.slice(mauStart, mauStart + MONTHS_WINDOW_SIZE)
+  const chartWidth = chartContainerWidth
+  const chartInnerWidth = chartWidth - padding.left - padding.right
   const chartInnerHeight = chartHeight - padding.top - padding.bottom
+
+  const handlePrevPeriod = () => {
+    if (isDaily) setDauWindowStart((s) => Math.max(0, s - 1))
+    else setMauWindowStart((s) => Math.max(0, s - 1))
+  }
+  const handleNextPeriod = () => {
+    if (isDaily) setDauWindowStart((s) => Math.min(dauMaxStart, s + 1))
+    else setMauWindowStart((s) => Math.min(mauMaxStart, s + 1))
+  }
 
   const renderActiveUsersLineChart = () => {
     const points = trendData.map((value, i) => {
@@ -121,25 +166,27 @@ const Engagement = () => {
   }
 
   const renderSessionsBarChart = () => {
-    const barWidth = 480
+    const barWidth = sessionsChartWidth
     const barHeight = 220
-    const pad = { top: 16, right: 40, bottom: 40, left: 24 }
+    const pad = { top: 20, right: 48, bottom: 44, left: 24 }
     const innerW = barWidth - pad.left - pad.right
     const innerH = barHeight - pad.top - pad.bottom
-    const barMax = 100
+    const rawMax = Math.max(...sessionsPerUserData.map((d) => d.value), 1)
+    const barMax = Math.ceil(rawMax * 1.1 / 10) * 10 || 10
+    const barTicks = [0, Math.round(barMax * 0.2), Math.round(barMax * 0.4), Math.round(barMax * 0.6), Math.round(barMax * 0.8), barMax]
     const barGap = innerW / (sessionsPerUserData.length + 1)
-    const barThickness = Math.min(barGap * 0.6, 48)
+    const barThickness = Math.min(barGap * 0.55, 52)
 
     return (
-      <svg viewBox={`0 0 ${barWidth} ${barHeight}`} className={styles.sessionsBarChart} preserveAspectRatio="xMidYMid meet">
-        {[20, 40, 60, 80, 100].map((val, i) => (
+      <svg viewBox={`0 0 ${barWidth} ${barHeight}`} className={styles.sessionsBarChart} preserveAspectRatio="xMinYMid meet">
+        {barTicks.map((val, i) => (
           <line
             key={i}
             x1={pad.left}
             y1={pad.top + innerH - (val / barMax) * innerH}
             x2={pad.left + innerW}
             y2={pad.top + innerH - (val / barMax) * innerH}
-            stroke="#f3f4f6"
+            stroke="#e5e7eb"
             strokeWidth="1"
           />
         ))}
@@ -160,7 +207,7 @@ const Engagement = () => {
               />
               <text
                 x={pad.left + (i + 1) * barGap}
-                y={barHeight - 12}
+                y={barHeight - 14}
                 textAnchor="middle"
                 className={styles.axisLabel}
               >
@@ -169,15 +216,27 @@ const Engagement = () => {
             </g>
           )
         })}
-        <text x={barWidth - 8} y={pad.top + innerH + 14} textAnchor="end" className={styles.axisLabel}>(Number of Users)</text>
-        <text x={barWidth - 8} y={pad.top + innerH + 28} textAnchor="end" className={styles.axisLabel}>0</text>
-        <text x={barWidth - 8} y={pad.top + innerH - (20 / barMax) * innerH + 4} textAnchor="end" className={styles.axisLabel}>20</text>
-        <text x={barWidth - 8} y={pad.top + innerH - (40 / barMax) * innerH + 4} textAnchor="end" className={styles.axisLabel}>40</text>
-        <text x={barWidth - 8} y={pad.top + innerH - (60 / barMax) * innerH + 4} textAnchor="end" className={styles.axisLabel}>60</text>
-        <text x={barWidth - 8} y={pad.top + innerH - (80 / barMax) * innerH + 4} textAnchor="end" className={styles.axisLabel}>80</text>
-        <text x={barWidth - 8} y={pad.top + 4} textAnchor="end" className={styles.axisLabel}>100</text>
-        <text x={pad.left + innerW / 2} y={barHeight - 4} textAnchor="middle" className={styles.axisLabel}>(Sessions)</text>
-      </svg>
+        <text
+          x={barWidth - 28}
+          y={pad.top + innerH / 2}
+          transform={`rotate(-90 ${barWidth - 28} ${pad.top + innerH / 2})`}
+          textAnchor="middle"
+          className={styles.axisLabel}
+        >
+          (Number of Users)
+        </text>
+        {barTicks.map((val, i) => (
+          <text
+            key={i}
+            x={barWidth - 10}
+            y={i === 0 ? pad.top + innerH + 32 : pad.top + innerH - (val / barMax) * innerH + 4}
+            textAnchor="end"
+            className={styles.axisLabel}
+          >
+            {val}
+          </text>
+        ))}
+        </svg>
     )
   }
 
@@ -257,24 +316,45 @@ const Engagement = () => {
                 <span className={styles.lastUpdatedText}>Last Updated Now</span>
               </div>
             </div>
-            <div className={styles.lineChartScrollWrap}>
-              <div className={styles.lineChartInner} style={{ minWidth: chartWidth }}>
-                {renderActiveUsersLineChart()}
+            <div className={styles.chartWithArrowsRow}>
+              <button
+                type="button"
+                className={styles.chartNavArrow}
+                aria-label={isDaily ? 'Previous hours' : 'Previous months'}
+                onClick={handlePrevPeriod}
+                disabled={isDaily ? dauStart <= 0 : mauStart <= 0}
+              >
+                ‹
+              </button>
+              <div className={styles.lineChartScrollWrap} ref={chartContainerRef}>
+                <div className={styles.lineChartInner}>
+                  {renderActiveUsersLineChart()}
+                </div>
               </div>
-            </div>
-            <div className={styles.chartNavArrows}>
-              <button type="button" className={styles.chartNavArrow} aria-label="Previous period">‹</button>
-              <button type="button" className={styles.chartNavArrow} aria-label="Next period">›</button>
+              <button
+                type="button"
+                className={styles.chartNavArrow}
+                aria-label={isDaily ? 'Next hours' : 'Next months'}
+                onClick={handleNextPeriod}
+                disabled={isDaily ? dauStart >= dauMaxStart : mauStart >= mauMaxStart}
+              >
+                ›
+              </button>
             </div>
           </div>
 
           <div className={styles.sessionsCard}>
-            <h3 className={styles.sessionsCardTitle}>Sessions Per User</h3>
-            <div className={styles.dottedLineSessions}></div>
-            <div className={styles.sessionsChartWrap}>
+            <div className={styles.sessionsCardTitleWrap}>
+              <h3 className={styles.sessionsCardTitle}>Sessions Per User</h3>
+              <div className={styles.dottedLineSessions}></div>
+            </div>
+            <div className={styles.sessionsChartWrap} ref={sessionsChartRef}>
               {renderSessionsBarChart()}
             </div>
             <div className={styles.sessionsCardFooter}>
+              <div className={styles.sessionsAxisLabelWrap}>
+                <span className={styles.sessionsAxisLabel}>(Sessions)</span>
+              </div>
               <Link href="/acquisition/all-users" className={styles.viewAllUsersLink}>
                 View All Users →
               </Link>
