@@ -227,7 +227,6 @@ const RetentionCompliance = () => {
                     <circle
                       cx="90"
                       cy="90"
-                      cy="90"
                       r={radius}
                       fill="none"
                       stroke="#6366f1"
