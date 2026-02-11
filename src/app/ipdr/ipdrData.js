@@ -6,7 +6,7 @@ export const ipdrData = {
     kpis: {
       // show only the numeric part in the UI (no % symbol)
       accessCountPct: 13,
-      accessCountChange: '+2% vs last week',
+      accessCountChange: '+2% vs last  week',
       policyViolations: 8,
       policyViolationsChange: '-2 vs last week',
       totalAuditEvents: '1,233',
