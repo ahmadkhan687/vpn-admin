@@ -1,0 +1,293 @@
+.dashboardContainer {
+  display: flex;
+  min-height: 100vh;
+  background: #f5f7fa;
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+.mainContent {
+  flex: 1;
+  margin-left: 240px;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  width: calc(100% - 240px);
+  max-width: 100%;
+  box-sizing: border-box;
+  transition: margin-left 0.3s ease, width 0.3s ease;
+}
+
+.withRealtimeSidebar .mainContent {
+  margin-left: 350px;
+  width: calc(100% - 350px);
+}
+
+.content {
+  margin-top: 90px;
+  padding: 24px;
+  flex: 1;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.sectionTitleWrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sectionTitle {
+  font-size: 28px;
+  font-weight: 700;
+  color: #1a1a1a;
+  font-family: var(--dashboard-fontFamily);
+  margin: 0;
+}
+
+.globeIcon {
+  width: 22px;
+  height: 22px;
+  color: #6b7280;
+  flex-shrink: 0;
+}
+
+.sectionSubtitle {
+  font-size: 14px;
+  color: #9ca3af;
+  font-family: var(--dashboard-fontFamily);
+  margin-left: 2px;
+}
+
+.headerButtons {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.addButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #374151;
+  background: #f3f4f6;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  font-family: var(--dashboard-fontFamily);
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.addButton:hover {
+  background: #e5e7eb;
+  border-color: #d1d5db;
+}
+
+.cardsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.regionCard {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+.cardTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16px;
+}
+
+.cardRegionInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.regionName {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1a1a1a;
+  font-family: var(--dashboard-fontFamily);
+  margin: 0 0 4px 0;
+}
+
+.regionCity {
+  font-size: 13px;
+  font-weight: 400;
+  color: #9ca3af;
+  font-family: var(--dashboard-fontFamily);
+  margin: 0;
+}
+
+.statusHealthy {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #16a34a;
+  font-family: var(--dashboard-fontFamily);
+}
+
+.statusDegraded {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #ea580c;
+  font-family: var(--dashboard-fontFamily);
+}
+
+.statusAlert {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #dc2626;
+  font-family: var(--dashboard-fontFamily);
+}
+
+.cardTopRight {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.alertIconLarge {
+  width: 24px;
+  height: 24px;
+  color: #dc2626;
+  flex-shrink: 0;
+}
+
+.refreshIcon {
+  width: 14px;
+  height: 14px;
+  color: #9ca3af;
+  flex-shrink: 0;
+}
+
+.lastUpdated {
+  font-size: 12px;
+  color: #9ca3af;
+  font-family: var(--dashboard-fontFamily);
+}
+
+.cardMetrics {
+  margin-bottom: 16px;
+}
+
+.activeTunnelsRow {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.activeTunnelsValue {
+  font-size: 24px;
+  font-weight: 700;
+  color: #1a1a1a;
+  font-family: var(--dashboard-fontFamily);
+}
+
+.activeTunnelsValue.alert {
+  color: #dc2626;
+}
+
+.activeTunnelsLabel {
+  font-size: 14px;
+  color: #9ca3af;
+  font-family: var(--dashboard-fontFamily);
+}
+
+.latencyValue {
+  font-size: 14px;
+  font-weight: 500;
+  color: #16a34a;
+  font-family: var(--dashboard-fontFamily);
+}
+
+.chartWrap {
+  width: 100%;
+  height: 100px;
+  position: relative;
+}
+
+.chartSvg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.barChartGrid {
+  stroke: #f3f4f6;
+  stroke-width: 1;
+}
+
+.barFill {
+  fill: #3b82f6;
+}
+
+.xAxisLabel {
+  font-size: 10px;
+  fill: #9ca3af;
+  font-family: var(--dashboard-fontFamily);
+}
+
+.scrollArrow {
+  font-size: 12px;
+  fill: #9ca3af;
+  font-family: var(--dashboard-fontFamily);
+}
+
+@media (max-width: 1200px) {
+  .cardsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .mainContent {
+    margin-left: 70px;
+    width: calc(100% - 70px);
+  }
+
+  .withRealtimeSidebar .mainContent {
+    margin-left: 70px;
+    width: calc(100% - 70px);
+  }
+
+  .cardsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .content {
+    padding: 16px;
+  }
+}

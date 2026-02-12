@@ -1,0 +1,423 @@
+.dashboardContainer {
+  display: flex;
+  min-height: 100vh;
+  background: #f5f7fa;
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+.mainContent {
+  flex: 1;
+  margin-left: 240px;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  width: calc(100% - 240px);
+  max-width: 100%;
+  box-sizing: border-box;
+  transition: margin-left 0.3s ease, width 0.3s ease;
+}
+
+.withRealtimeSidebar .mainContent {
+  margin-left: 350px;
+  width: calc(100% - 350px);
+}
+
+.content {
+  margin-top: 90px;
+  padding: 24px;
+  flex: 1;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+.pageHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 24px;
+  padding: 0;
+}
+
+.pageHeaderLeft {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+}
+
+.titleRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.pageTitle {
+  font-size: 28px;
+  font-weight: 600;
+  color: #1a1a1a;
+  font-family: var(--dashboard-fontFamily);
+  margin: 0;
+}
+
+.titlePillOrange {
+  display: inline-block;
+  padding: 4px 12px;
+  background: #ffedd5;
+  color: #9a3412;
+  font-size: 13px;
+  font-family: var(--dashboard-fontFamily);
+  border-radius: 9999px;
+  font-weight: 500;
+  border: 1px solid #fed7aa;
+}
+
+.dottedLine {
+  width: 100%;
+  max-width: 400px;
+  height: 0;
+  border-bottom: 2px dotted #d1d5db;
+  margin: 4px 0;
+}
+
+.pageDescription {
+  font-size: 14px;
+  color: #6b7280;
+  font-family: var(--dashboard-fontFamily);
+  margin: 0;
+  line-height: 1.5;
+}
+
+.pageHeaderRight {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.dateRangeSelector {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  cursor: pointer;
+  color: #374151;
+  font-family: var(--dashboard-fontFamily);
+  font-size: 13px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.dateRangeLabel,
+.dateRangeValue {
+  font-size: 13px;
+}
+
+.dateRangeValue {
+  color: #6b7280;
+}
+
+.dateRangeChevron {
+  font-size: 10px;
+  color: #6b7280;
+  margin-left: 2px;
+}
+
+.dateRangeDropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  min-width: 260px;
+  z-index: 100;
+  overflow: hidden;
+}
+
+.dateRangeOption {
+  padding: 12px 16px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.dateRangeOption:hover {
+  background: #f9fafb;
+}
+
+.dateRangeOptionActive {
+  background: #eff6ff;
+}
+
+.dateRangeOptionLabel {
+  font-size: 14px;
+  font-weight: 500;
+  color: #374151;
+  font-family: var(--dashboard-fontFamily);
+}
+
+.dateRangeOptionRange {
+  font-size: 12px;
+  color: #9ca3af;
+  font-family: var(--dashboard-fontFamily);
+}
+
+/* Metric cards */
+.cardsColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.metricCard {
+  width: 100%;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+.metricCardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16px;
+}
+
+.metricCardTitle {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1a1a1a;
+  font-family: var(--dashboard-fontFamily);
+  margin: 0;
+}
+
+.refreshWrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: #9ca3af;
+  font-family: var(--dashboard-fontFamily);
+}
+
+.refreshIcon {
+  font-size: 14px;
+}
+
+.metricMainRow {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+
+.metricValue {
+  font-size: 36px;
+  font-weight: 700;
+  color: #1a1a1a;
+  font-family: var(--dashboard-fontFamily);
+}
+
+.slaBadge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #16a34a;
+  font-family: var(--dashboard-fontFamily);
+}
+
+.slaCheck {
+  font-size: 18px;
+}
+
+.metricChangeGreen {
+  font-size: 14px;
+  color: #16a34a;
+  font-family: var(--dashboard-fontFamily);
+  margin-bottom: 20px;
+}
+
+.metricChangeRed {
+  font-size: 14px;
+  color: #dc2626;
+  font-family: var(--dashboard-fontFamily);
+  margin-bottom: 20px;
+}
+
+.thresholdBarRow {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+.thresholdBarWrap {
+  flex: 1;
+  min-width: 200px;
+  position: relative;
+  height: 50px;
+}
+
+.thresholdBar {
+  position: absolute;
+  top: 24px;
+  left: 0;
+  right: 0;
+  height: 12px;
+  border-radius: 6px;
+  background: linear-gradient(to right, #16a34a 0%, #84cc16 25%, #eab308 50%, #f97316 75%, #dc2626 100%);
+}
+
+.markerGroup {
+  position: absolute;
+  top: 0;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.markerBubble {
+  margin-bottom: 8px;
+  padding: 4px 10px;
+  background: #f3f4f6;
+  border: 1px solid #e5e7eb;
+  border-radius: 9999px;
+  font-size: 12px;
+  color: #374151;
+  font-family: var(--dashboard-fontFamily);
+  white-space: nowrap;
+}
+
+.markerBubbleBelow {
+  margin-top: 8px;
+  padding: 4px 10px;
+  background: #f3f4f6;
+  border: 1px solid #e5e7eb;
+  border-radius: 9999px;
+  font-size: 12px;
+  color: #374151;
+  font-family: var(--dashboard-fontFamily);
+  white-space: nowrap;
+}
+
+.markerWarningIcon {
+  margin-bottom: 4px;
+  font-size: 14px;
+}
+
+.thresholdMarker {
+  width: 2px;
+  height: 20px;
+  background: #16a34a;
+}
+
+.thresholdMarkerRed {
+  width: 2px;
+  height: 20px;
+  background: #dc2626;
+}
+
+.thresholdMarkerWarning {
+  width: 2px;
+  height: 20px;
+  background: #dc2626;
+}
+
+.thresholdBox {
+  padding: 12px 16px;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 13px;
+  color: #6b7280;
+  font-family: var(--dashboard-fontFamily);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.thresholdWarningIcon {
+  font-size: 16px;
+}
+
+.thresholdValue {
+  color: #dc2626;
+  font-weight: 600;
+}
+
+.failuresBox {
+  padding: 12px 16px;
+  background: #dc2626;
+  color: #fff;
+  border-radius: 8px;
+  font-size: 13px;
+  font-family: var(--dashboard-fontFamily);
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.failuresWarningIcon {
+  font-size: 16px;
+}
+
+.statusRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #374151;
+  font-family: var(--dashboard-fontFamily);
+}
+
+.statusCheck {
+  color: #16a34a;
+  font-size: 18px;
+}
+
+.statusRowWarning {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #374151;
+  font-family: var(--dashboard-fontFamily);
+}
+
+.statusWarningIcon {
+  color: #eab308;
+  font-size: 18px;
+}
+
+@media (max-width: 768px) {
+  .mainContent {
+    margin-left: 70px;
+    width: calc(100% - 70px);
+  }
+
+  .withRealtimeSidebar .mainContent {
+    margin-left: 70px;
+    width: calc(100% - 70px);
+  }
+
+  .content {
+    padding: 16px;
+  }
+}

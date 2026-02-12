@@ -18,6 +18,10 @@ const Header = ({ dropdownOptions = [], defaultValue, onValueChange }) => {
                                  pathname === '/engagement' ||
                                  pathname === '/conversion' ||
                                  pathname === '/retention' ||
+                                 pathname === '/network-overview' ||
+                                 pathname === '/reliability-failure' ||
+                                 pathname === '/region-health-state' ||
+                                 pathname === '/performance-quality' ||
                                  pathname === '/ipdr' ||
                                  pathname === '/retention-compliance'
   const [selectedValue, setSelectedValue] = useState(

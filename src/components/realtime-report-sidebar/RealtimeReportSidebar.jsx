@@ -37,6 +37,14 @@ const RealtimeReportSidebar = () => {
       sections.businessObjectives = true
       subItems.growthAndProductPerformance = true
     }
+    if (pathname === '/network-overview' || pathname === '/reliability-failure' || pathname === '/performance-quality' || pathname === '/region-health-state') {
+      sections.networkProtocol = true
+      subItems.networkHealth = true
+    }
+    if (pathname === '/protocol-overview' || pathname === '/session-behavior' || pathname === '/connection-stability') {
+      sections.networkProtocol = true
+      subItems.protocolAndTrafficMix = true
+    }
     
     return { sections, subItems }
   }
@@ -130,18 +138,19 @@ const RealtimeReportSidebar = () => {
           id: 'networkHealth',
           name: 'Network Health',
           subItems: [
-            { name: 'Network Overview', path: '#' },
-            { name: 'Reliability & Failures', path: '#' },
-            { name: 'Performance & Quality', path: '#' },
+            { name: 'Network Overview', path: '/network-overview' },
+            { name: 'Reliability & Failures', path: '/reliability-failure' },
+            { name: 'Performance & Quality', path: '/performance-quality' },
+            { name: 'Region Health State', path: '/region-health-state' },
           ],
         },
         {
           id: 'protocolAndTrafficMix',
           name: 'Protocol and Traffic Mix',
           subItems: [
-            { name: 'Overview', path: '#' },
-            { name: 'Session Behavior', path: '#' },
-            { name: 'Connection Stability', path: '#' },
+            { name: 'Overview', path: '/protocol-overview' },
+            { name: 'Session Behavior', path: '/session-behavior' },
+            { name: 'Connection Stability', path: '/connection-stability' },
           ],
         },
       ],

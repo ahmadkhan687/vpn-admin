@@ -1,0 +1,393 @@
+.dashboardContainer {
+  display: flex;
+  min-height: 100vh;
+  background: #f5f7fa;
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+.mainContent {
+  flex: 1;
+  margin-left: 240px;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  width: calc(100% - 240px);
+  max-width: 100%;
+  box-sizing: border-box;
+  transition: margin-left 0.3s ease, width 0.3s ease;
+}
+
+.withRealtimeSidebar .mainContent {
+  margin-left: 350px;
+  width: calc(100% - 350px);
+}
+
+.content {
+  margin-top: 90px;
+  padding: 24px;
+  flex: 1;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+.pageHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 24px;
+  padding: 0;
+}
+
+.pageHeaderLeft {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+}
+
+.titleRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.pageTitle {
+  font-size: 28px;
+  font-weight: 600;
+  color: #1a1a1a;
+  font-family: var(--dashboard-fontFamily);
+  margin: 0;
+}
+
+.titlePillOrange {
+  display: inline-block;
+  padding: 4px 12px;
+  background: #ffedd5;
+  color: #9a3412;
+  font-size: 13px;
+  font-family: var(--dashboard-fontFamily);
+  border-radius: 9999px;
+  font-weight: 500;
+  border: 1px solid #fed7aa;
+}
+
+.totalHoursBadge {
+  display: inline-block;
+  padding: 4px 12px;
+  background: #eff6ff;
+  color: #1d4ed8;
+  font-size: 13px;
+  font-family: var(--dashboard-fontFamily);
+  border-radius: 9999px;
+  font-weight: 500;
+  border: 1px solid #bfdbfe;
+}
+
+.scopeHint {
+  color: #6b7280;
+  font-weight: 400;
+  font-size: 12px;
+}
+
+.dottedLine {
+  width: 100%;
+  max-width: 400px;
+  height: 0;
+  border-bottom: 2px dotted #d1d5db;
+  margin: 4px 0;
+}
+
+.pageDescription {
+  font-size: 14px;
+  color: #6b7280;
+  font-family: var(--dashboard-fontFamily);
+  margin: 0;
+  line-height: 1.5;
+}
+
+.pageHeaderRight {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.dateRangeSelector {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  cursor: pointer;
+  color: #374151;
+  font-family: var(--dashboard-fontFamily);
+  font-size: 13px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.dateRangeLabel,
+.dateRangeValue {
+  font-size: 13px;
+}
+
+.dateRangeValue {
+  color: #6b7280;
+}
+
+.dateRangeChevron {
+  font-size: 10px;
+  color: #6b7280;
+  margin-left: 2px;
+}
+
+.dateRangeDropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  min-width: 260px;
+  z-index: 100;
+  overflow: hidden;
+}
+
+.dateRangeOption {
+  padding: 12px 16px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.dateRangeOption:hover {
+  background: #f9fafb;
+}
+
+.dateRangeOptionActive {
+  background: #eff6ff;
+}
+
+.dateRangeOptionLabel {
+  font-size: 14px;
+  font-weight: 500;
+  color: #374151;
+  font-family: var(--dashboard-fontFamily);
+}
+
+.dateRangeOptionRange {
+  font-size: 12px;
+  color: #9ca3af;
+  font-family: var(--dashboard-fontFamily);
+}
+
+.cardsColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.metricCard {
+  width: 100%;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+.metricCardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16px;
+}
+
+.metricCardTitle {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1a1a1a;
+  font-family: var(--dashboard-fontFamily);
+  margin: 0;
+}
+
+.refreshWrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: #9ca3af;
+  font-family: var(--dashboard-fontFamily);
+}
+
+.refreshIcon {
+  font-size: 14px;
+}
+
+.metricValueRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.metricValue {
+  font-size: 32px;
+  font-weight: 700;
+  color: #1a1a1a;
+  font-family: var(--dashboard-fontFamily);
+}
+
+.metricTrendGreen {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 14px;
+  color: #16a34a;
+  font-family: var(--dashboard-fontFamily);
+}
+
+.metricTrendRed {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 14px;
+  color: #dc2626;
+  font-family: var(--dashboard-fontFamily);
+}
+
+.trendArrow {
+  font-size: 14px;
+}
+
+.egressThreshold {
+  font-size: 13px;
+  color: #6b7280;
+  font-family: var(--dashboard-fontFamily);
+  margin: 0 0 12px 0;
+}
+
+.chartWithArrows {
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+  width: 100%;
+  max-width: 100%;
+  position: relative;
+}
+
+.chartNavArrow {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  background: #fff;
+  color: #6b7280;
+  font-size: 18px;
+  cursor: pointer;
+  transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+
+.chartNavArrow:hover {
+  color: #374151;
+  border-color: #d1d5db;
+  background: #f9fafb;
+}
+
+.chartNavArrow:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.lineChartWrap {
+  flex: 1;
+  min-width: 0;
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+.barChartWrap {
+  flex: 1;
+  min-width: 0;
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+.lineChartSvg,
+.barChartSvg {
+  display: block;
+  width: 100%;
+  height: 220px;
+  max-width: 100%;
+}
+
+.axisLabel {
+  font-size: 11px;
+  fill: #6b7280;
+  font-family: var(--dashboard-fontFamily);
+}
+
+.egressAxisLabel {
+  font-size: 9px;
+  fill: #6b7280;
+  font-family: var(--dashboard-fontFamily);
+}
+
+.chartTooltip {
+  position: absolute;
+  transform: translate(-50%, 0);
+  background: #1f2937;
+  color: #fff;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-family: var(--dashboard-fontFamily);
+  white-space: nowrap;
+  z-index: 100;
+  pointer-events: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.chartTooltip div {
+  line-height: 1.4;
+}
+
+.pointHovered {
+  r: 6;
+}
+
+.barHovered {
+  opacity: 0.85;
+}
+
+@media (max-width: 768px) {
+  .mainContent {
+    margin-left: 70px;
+    width: calc(100% - 70px);
+  }
+
+  .withRealtimeSidebar .mainContent {
+    margin-left: 70px;
+    width: calc(100% - 70px);
+  }
+
+  .content {
+    padding: 16px;
+  }
+}

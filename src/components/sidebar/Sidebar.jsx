@@ -24,14 +24,19 @@ const Sidebar = () => {
                              pathname === '/engagement' ||
                              pathname === '/conversion' ||
                              pathname === '/retention' ||
+                             pathname === '/network-overview' ||
+                             pathname === '/reliability-failure' ||
+                             pathname === '/region-health-state' ||
+                             pathname === '/performance-quality' ||
+                             pathname === '/protocol-overview' ||
+                             pathname === '/session-behavior' ||
+                             pathname === '/connection-stability' ||
                              pathname === '/ipdr' ||
                              pathname === '/retention-compliance'
 
   const menuItems = [
     { name: 'Home', path: '/dashboard', icon: '/icons/Home.png' },
-    { name: 'KPI Summary Page', path: '/kpi-summary', icon: '/icons/Mask group.png' },
-    { name: 'KPI Full Metrics', path: '/kpi-full-metrics', icon: '/icons/Full Metrix.png' },
-    { name: 'KPI Breakdown Page', path: '/kpi-breakdown', icon: '/icons/Breakdown.png' },
+    { name: 'KPI Insights', path: '/kpi-summary', icon: '/icons/Mask group.png' },
     { name: 'Alerts', path: '/alerts', icon: '/icons/Alert triangle.png' },
   ]
 
