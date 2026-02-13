@@ -1,82 +1,37 @@
 'use client'
 
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState } from 'react'
 import Sidebar from '@/components/sidebar/Sidebar'
 import RealtimeReportSidebar from '@/components/realtime-report-sidebar/RealtimeReportSidebar'
 import Header from '@/components/header/Header'
 import styles from './connection-stability.module.css'
+import DateRangePicker from '@/components/date-range-picker/DateRangePicker'
+import { getConnectionStabilityData } from './connectionStabilityData'
 
 const ALL_MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 const MONTHS_PER_VIEW = 3
 const RECONNECT_MAX_START = ALL_MONTHS.length - MONTHS_PER_VIEW
-
-const buildReconnectData = () => {
-  const patterns = [
-    [3200, 12500, 18500, 8200],
-    [4200, 14200, 19500, 9200],
-    [3800, 13200, 17800, 8500],
-    [4500, 15200, 21500, 10200],
-    [3900, 12800, 18200, 8800],
-    [4800, 16200, 22800, 11200],
-    [4100, 13800, 19200, 9500],
-    [4400, 14800, 20800, 9800],
-    [3600, 12200, 17200, 7900],
-    [4700, 15800, 22200, 10800],
-    [4000, 13500, 18800, 9100],
-    [3400, 11800, 16800, 7600],
-  ]
-  const out = []
-  for (let m = 0; m < 12; m++) {
-    for (let i = 0; i < 4; i++) {
-      out.push({ month: ALL_MONTHS[m], value: patterns[m][i] })
-    }
-  }
-  return out
-}
-const ALL_RECONNECT_DATA = buildReconnectData()
 const Y_AXIS_VALUES = [0, 5000, 10000, 15000, 20000, 25000]
-
-const MTU_LOCATION_DATA = [
-  { label: 'USA', value: 340, color: '#ea580c' },
-  { label: 'Canada', value: 280, color: '#fb923c' },
-  { label: 'UK', value: 240, color: '#c2410c' },
-  { label: 'France', value: 260, color: '#3b82f6' },
-]
 
 const ConnectionStability = () => {
   const [selectedVPN, setSelectedVPN] = useState('Portfolio')
-  const [dateRange, setDateRange] = useState('Last 28 days')
-  const [isDateDropdownOpen, setIsDateDropdownOpen] = useState(false)
+  const [dateRange, setDateRange] = useState({
+    startDate: new Date(2025, 11, 19),
+    endDate: new Date(2026, 0, 15),
+  })
   const [chartMonthStart, setChartMonthStart] = useState(3)
-  const dateDropdownRef = useRef(null)
-
-  useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (dateDropdownRef.current && !dateDropdownRef.current.contains(e.target)) {
-        setIsDateDropdownOpen(false)
-      }
-    }
-    document.addEventListener('mousedown', handleClickOutside)
-    return () => document.removeEventListener('mousedown', handleClickOutside)
-  }, [isDateDropdownOpen])
 
   const scopeOptions = ['Portfolio', 'Steer Lucid', 'Crest', 'Slick', 'Fortivo', 'Qucik', 'Nexipher']
-  const dateRangeOptions = [
-    { label: 'Last 7 days', range: 'Jan 9, 2026 – Jan 15, 2026' },
-    { label: 'Last 14 days', range: 'Jan 2, 2026 – Jan 15, 2026' },
-    { label: 'Last 28 days', range: 'Dec 19, 2025 – Jan 15, 2026' },
-    { label: 'Last 90 days', range: 'Oct 18, 2025 – Jan 15, 2026' },
-  ]
-  const currentDateRange = dateRangeOptions.find((o) => o.label === dateRange) || dateRangeOptions[2]
 
   const handleVPNChange = (vpn) => setSelectedVPN(vpn)
+  const scopeData = getConnectionStabilityData(selectedVPN)
 
   const renderReconnectAreaChart = () => {
     const visibleMonths = ALL_MONTHS.slice(chartMonthStart, chartMonthStart + MONTHS_PER_VIEW)
     const pointsPerMonth = 4
     const startIdx = chartMonthStart * pointsPerMonth
     const endIdx = (chartMonthStart + MONTHS_PER_VIEW) * pointsPerMonth
-    const chartData = ALL_RECONNECT_DATA.slice(startIdx, endIdx)
+    const chartData = scopeData.reconnectData.slice(startIdx, endIdx)
 
     const width = 1000
     const height = 240
@@ -192,26 +147,12 @@ const ConnectionStability = () => {
                 How fast are users and devices growing, where is that growth coming from, and is it happening efficiently?
               </p>
             </div>
-            <div className={styles.pageHeaderRight} ref={dateDropdownRef}>
-              <div className={styles.dateRangeSelector} onClick={() => setIsDateDropdownOpen(!isDateDropdownOpen)}>
-                <span className={styles.dateRangeLabel}>{dateRange}</span>
-                <span className={styles.dateRangeValue}>{currentDateRange.range}</span>
-                <span className={styles.dateRangeChevron}>▼</span>
-              </div>
-              {isDateDropdownOpen && (
-                <div className={styles.dateRangeDropdown}>
-                  {dateRangeOptions.map((opt) => (
-                    <div
-                      key={opt.label}
-                      className={`${styles.dateRangeOption} ${dateRange === opt.label ? styles.dateRangeOptionActive : ''}`}
-                      onClick={() => { setDateRange(opt.label); setIsDateDropdownOpen(false) }}
-                    >
-                      <span className={styles.dateRangeOptionLabel}>{opt.label}</span>
-                      <span className={styles.dateRangeOptionRange}>{opt.range}</span>
-                    </div>
-                  ))}
-                </div>
-              )}
+            <div className={styles.pageHeaderRight}>
+              <DateRangePicker
+                value={dateRange}
+                onChange={setDateRange}
+                presets={['Last 7 days', 'Last 14 days', 'Last 28 days', 'Last 90 days']}
+              />
             </div>
           </div>
 
@@ -225,17 +166,17 @@ const ConnectionStability = () => {
                 </div>
               </div>
               <div className={styles.metricValueRow}>
-                <span className={styles.metricValue}>0.38 reconnects/ sessions</span>
-                <span className={styles.stableBadge}>Stable</span>
+                <span className={styles.metricValue}>{scopeData.reconnectsPerSession} reconnects/ sessions</span>
+                <span className={styles.stableBadge}>{scopeData.status}</span>
               </div>
               <div className={styles.chartContainer}>
                 {renderReconnectAreaChart()}
               </div>
               <div className={styles.summaryRow}>
-                <span className={styles.summaryLeft}>Affected Sessions: 7.4%</span>
+                <span className={styles.summaryLeft}>Affected Sessions: {scopeData.affectedSessions}</span>
                 <span className={styles.summaryRight}>
                   <span className={styles.globeIcon}>🌐</span>
-                  Most Impacted region : South Asia
+                  Most Impacted region : {scopeData.mostImpactedRegion}
                 </span>
               </div>
             </div>
@@ -249,11 +190,11 @@ const ConnectionStability = () => {
                 </div>
               </div>
               <div className={styles.mtuErrorRow}>
-                <span className={styles.mtuErrorValue}>1,284 errors</span>
+                <span className={styles.mtuErrorValue}>{scopeData.mtuErrors.toLocaleString()} errors</span>
                 <span className={styles.mtuElevated}>
-                  <span className={styles.mtuArrowRed}>↑</span> Elevated
+                  <span className={styles.mtuArrowRed}>{scopeData.mtuChange >= 0 ? '↑' : '↓'}</span> {scopeData.mtuChange >= 0 ? 'Elevated' : 'Improved'}
                 </span>
-                <span className={styles.mtuErrorBadge}>+18 Errors</span>
+                <span className={styles.mtuErrorBadge}>{scopeData.mtuChange >= 0 ? '+' : ''}{scopeData.mtuChange} Errors</span>
               </div>
               <div className={styles.mtuInsightsSection}>
                 <h4 className={styles.mtuInsightsTitle}>MTU Error Insights</h4>
@@ -279,8 +220,8 @@ const ConnectionStability = () => {
                   Location Based Errors
                 </h4>
                 <div className={styles.mtuBarChart}>
-                  {MTU_LOCATION_DATA.map((item) => {
-                    const maxVal = Math.max(...MTU_LOCATION_DATA.map((d) => d.value))
+                  {scopeData.mtuLocation.map((item) => {
+                    const maxVal = Math.max(...scopeData.mtuLocation.map((d) => d.value))
                     const pct = (item.value / maxVal) * 100
                     return (
                       <div key={item.label} className={styles.mtuBarRow}>

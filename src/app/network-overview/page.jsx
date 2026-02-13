@@ -5,30 +5,15 @@ import Sidebar from '@/components/sidebar/Sidebar'
 import RealtimeReportSidebar from '@/components/realtime-report-sidebar/RealtimeReportSidebar'
 import Header from '@/components/header/Header'
 import styles from './network-overview.module.css'
+import { getNetworkOverviewData } from './networkOverviewData'
 
 const ALL_MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 const POINTS_PER_MONTH = 4
-// 12 months × 4 points = 48 points, dynamic ups and downs
-const ACTIVE_TUNNELS_VALUES = [
-  3500, 9200, 5200, 18200, 22100, 11500, 20800, 19800, 21000, 8800, 17500, 20400,
-  19200, 10500, 22800, 17200, 20500, 14200, 18800, 21800, 16500, 19800, 11800, 19200,
-  20500, 8200, 23200, 16800, 20200, 13200, 18500, 21200, 15800, 19500, 11200, 20800,
-  17800, 21500, 13800, 19000, 20200, 9200, 17200, 20900, 17000, 19700, 12500, 20679,
-]
-const TUNNELS_WINDOW = 12 // 3 months × 4 points
+const TUNNELS_WINDOW = 12
 const ACTIVE_TUNNELS_YMAX = 25000
 
 const PEAK_DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
 const BARS_PER_DAY = 8
-// 7 days × 8 bars each, ups and downs, peak (3120) on Friday evening bar
-const PEAK_VALUES = [
-  420, 380, 520, 680, 820, 750, 580, 410, 510, 620, 780, 910, 880, 720, 540, 480,
-  580, 710, 850, 980, 1050, 920, 680, 550, 640, 760, 920, 1100, 1180, 1020, 780, 620,
-  720, 850, 1000, 1200, 1280, 1150, 880, 700, 780, 920, 1080, 1320, 1420, 1250, 950, 780,
-  850, 980, 1150, 1400, 1520, 1380, 1050, 850, 920, 1050, 1250, 1500, 1650, 1480, 1150, 920,
-  980, 1120, 1320, 1580, 1780, 1620, 1280, 1020, 1050, 1200, 1420, 1700, 1920, 1750, 1380, 1100,
-  1150, 1320, 1550, 1850, 2100, 1950, 1580, 3120, 880, 720, 680, 620, 580, 520, 480, 440,
-]
 const PEAK_YMAX = 3000
 
 const NetworkOverview = () => {
@@ -41,9 +26,10 @@ const NetworkOverview = () => {
   const [tunnelsWidth, setTunnelsWidth] = useState(400)
   const [peakWidth, setPeakWidth] = useState(400)
 
+  const scopeData = getNetworkOverviewData(selectedVPN)
   const maxTunnelsStart = Math.max(0, ALL_MONTHS.length - 3)
   const visibleTunnelsMonths = ALL_MONTHS.slice(tunnelsMonthStart, tunnelsMonthStart + 3)
-  const visibleTunnelsValues = ACTIVE_TUNNELS_VALUES.slice(
+  const visibleTunnelsValues = scopeData.activeTunnelsValues.slice(
     tunnelsMonthStart * POINTS_PER_MONTH,
     tunnelsMonthStart * POINTS_PER_MONTH + TUNNELS_WINDOW
   )
@@ -102,10 +88,11 @@ const NetworkOverview = () => {
 
   const peakInnerW = peakWidth - pad.left - pad.right
   const peakInnerH = chartH - pad.top - pad.bottom
-  const totalBars = PEAK_VALUES.length
+  const peakValues = scopeData.peakValues
+  const totalBars = peakValues.length
   const barGap = 1
   const barW = (peakInnerW - (totalBars - 1) * barGap) / totalBars
-  const peakBarIndex = PEAK_VALUES.indexOf(3120)
+  const peakBarIndex = peakValues.indexOf(Math.max(...peakValues))
 
   return (
     <div className={`${styles.dashboardContainer} ${styles.withRealtimeSidebar}`}>
@@ -265,7 +252,7 @@ const NetworkOverview = () => {
                       strokeWidth="1"
                     />
                   ))}
-                  {PEAK_VALUES.map((v, i) => {
+                  {peakValues.map((v, i) => {
                     const barH = (v / PEAK_YMAX) * peakInnerH
                     const x = pad.left + i * (barW + barGap) + barW / 2
                     const barX = pad.left + i * (barW + barGap)

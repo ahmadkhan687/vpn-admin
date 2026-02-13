@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import Sidebar from '@/components/sidebar/Sidebar'
 import RealtimeReportSidebar from '@/components/realtime-report-sidebar/RealtimeReportSidebar'
 import Header from '@/components/header/Header'
+import DateRangePicker from '@/components/date-range-picker/DateRangePicker'
 import { getReliabilityData } from './reliabilityFailureData'
 import styles from './reliability-failure.module.css'
 
@@ -15,26 +16,17 @@ const LOG_COLUMNS = ['Timestamp', 'Failure Type', 'Reason', 'User', 'Device', 'R
 
 const ReliabilityFailure = () => {
   const [selectedVPN, setSelectedVPN] = useState('Portfolio')
-  const [dateRange, setDateRange] = useState('Last 28 days')
-  const [isDateDropdownOpen, setIsDateDropdownOpen] = useState(false)
+  const [dateRange, setDateRange] = useState({
+    startDate: new Date(2025, 11, 19),
+    endDate: new Date(2026, 0, 15),
+  })
   const [logSortColumn, setLogSortColumn] = useState('Region')
   const [logSearch, setLogSearch] = useState('')
-  const dateDropdownRef = useRef(null)
   const tunnelChartRef = useRef(null)
   const authChartRef = useRef(null)
   const [tunnelWidth, setTunnelWidth] = useState(400)
   const [authWidth, setAuthWidth] = useState(400)
   const [hoveredTunnelDay, setHoveredTunnelDay] = useState(null)
-
-  useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (dateDropdownRef.current && !dateDropdownRef.current.contains(e.target)) {
-        setIsDateDropdownOpen(false)
-      }
-    }
-    document.addEventListener('mousedown', handleClickOutside)
-    return () => document.removeEventListener('mousedown', handleClickOutside)
-  }, [isDateDropdownOpen])
 
   useEffect(() => {
     const el1 = tunnelChartRef.current
@@ -74,14 +66,6 @@ const ReliabilityFailure = () => {
       e.region.toLowerCase().includes(q)
     )
   })
-
-  const dateRangeOptions = [
-    { label: 'Last 7 days', range: 'Jan 9, 2026 – Jan 15, 2026' },
-    { label: 'Last 14 days', range: 'Jan 2, 2026 – Jan 15, 2026' },
-    { label: 'Last 28 days', range: 'Dec 19, 2025 – Jan 15, 2026' },
-    { label: 'Last 90 days', range: 'Oct 18, 2025 – Jan 15, 2026' },
-  ]
-  const currentDateRange = dateRangeOptions.find((o) => o.label === dateRange) || dateRangeOptions[2]
 
   const handleVPNChange = (vpn) => setSelectedVPN(vpn)
 
@@ -133,26 +117,12 @@ const ReliabilityFailure = () => {
                 How fast are users and devices growing, where is that growth coming from, and is it happening efficiently?
               </p>
             </div>
-            <div className={styles.pageHeaderRight} ref={dateDropdownRef}>
-              <div className={styles.dateRangeSelector} onClick={() => setIsDateDropdownOpen(!isDateDropdownOpen)}>
-                <span className={styles.dateRangeLabel}>{dateRange}</span>
-                <span className={styles.dateRangeValue}>{currentDateRange.range}</span>
-                <span className={styles.dateRangeChevron}>▼</span>
-              </div>
-              {isDateDropdownOpen && (
-                <div className={styles.dateRangeDropdown}>
-                  {dateRangeOptions.map((opt) => (
-                    <div
-                      key={opt.label}
-                      className={`${styles.dateRangeOption} ${dateRange === opt.label ? styles.dateRangeOptionActive : ''}`}
-                      onClick={() => { setDateRange(opt.label); setIsDateDropdownOpen(false) }}
-                    >
-                      <span className={styles.dateRangeOptionLabel}>{opt.label}</span>
-                      <span className={styles.dateRangeOptionRange}>{opt.range}</span>
-                    </div>
-                  ))}
-                </div>
-              )}
+            <div className={styles.pageHeaderRight}>
+              <DateRangePicker
+                value={dateRange}
+                onChange={setDateRange}
+                presets={['Last 7 days', 'Last 14 days', 'Last 28 days', 'Last 90 days']}
+              />
             </div>
           </div>
 

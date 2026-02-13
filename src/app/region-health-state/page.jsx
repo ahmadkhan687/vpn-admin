@@ -5,22 +5,7 @@ import Sidebar from '@/components/sidebar/Sidebar'
 import RealtimeReportSidebar from '@/components/realtime-report-sidebar/RealtimeReportSidebar'
 import Header from '@/components/header/Header'
 import styles from './region-health-state.module.css'
-
-const REGION_BAR_VALUES = [
-  [820, 910, 1050, 1180, 1320, 1280, 1150, 980, 920, 1050, 1180, 1020],
-  [780, 880, 1020, 1150, 1280, 1250, 1120, 950, 880, 980, 1100, 950],
-  [420, 480, 520, 580, 620, 590, 510, 380, 320, 410, 480, 450],
-  [800, 890, 1040, 1170, 1300, 1270, 1140, 970, 910, 1010, 1130, 990],
-  [810, 900, 1040, 1170, 1310, 1280, 1150, 980, 920, 1020, 1140, 1000],
-]
-
-const REGIONS = [
-  { name: 'India 1', city: 'Mumbai', status: 'healthy', activeTunnels: 3320 },
-  { name: 'Germany', city: 'Frankfurt', status: 'degraded', activeTunnels: 3320 },
-  { name: 'USA 1', city: 'Los Angeles', status: 'alert', activeTunnels: 320 },
-  { name: 'UK', city: 'London', status: 'healthy', activeTunnels: 3320 },
-  { name: 'Canada', city: 'Toronto', status: 'healthy', activeTunnels: 3320 },
-]
+import { getRegionHealthStateData } from './regionHealthStateData'
 
 const TIME_LABELS = ['12pm', '2pm', '4pm', '6pm', '8pm', '10pm', '12am']
 
@@ -78,7 +63,7 @@ const RegionHealthState = () => {
   ]
 
   useEffect(() => {
-    const observers = REGIONS.map((_, i) => {
+    const observers = regions.map((_, i) => {
       const el = cardRefs.current[i]?.querySelector('[data-chart]')
       if (!el) return null
       const obs = new ResizeObserver((entries) => {
@@ -90,9 +75,12 @@ const RegionHealthState = () => {
       return obs
     })
     return () => observers.forEach((obs) => obs?.disconnect())
-  }, [])
+  }, [selectedVPN])
 
   const handleVPNChange = (vpn) => setSelectedVPN(vpn)
+  const scopeData = getRegionHealthStateData(selectedVPN)
+  const regions = scopeData.regions
+  const regionBarValues = scopeData.regionBarValues
 
   const pad = { top: 8, right: 24, bottom: 28, left: 8 }
   const chartH = 100
@@ -210,7 +198,7 @@ const RegionHealthState = () => {
           </div>
 
           <div className={styles.cardsGrid}>
-            {REGIONS.map((region, index) => (
+            {regions.map((region, index) => (
               <div
                 key={`${region.name}-${region.city}`}
                 className={styles.regionCard}
@@ -241,7 +229,7 @@ const RegionHealthState = () => {
                 </div>
 
                 <div className={styles.chartWrap} data-chart>
-                  {renderBarChart(REGION_BAR_VALUES[index], index)}
+                  {renderBarChart(regionBarValues[index], index)}
                 </div>
               </div>
             ))}

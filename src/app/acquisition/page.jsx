@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { PieChart } from '@mui/x-charts/PieChart'
 import Sidebar from '@/components/sidebar/Sidebar'
 import RealtimeReportSidebar from '@/components/realtime-report-sidebar/RealtimeReportSidebar'
+import DateRangePicker from '@/components/date-range-picker/DateRangePicker'
 import Header from '@/components/header/Header'
 import styles from './acquisition.module.css'
 
@@ -135,8 +136,10 @@ const allUsersTableDataByType = {
 
 const Acquisition = () => {
   const [selectedVPN, setSelectedVPN] = useState('Portfolio')
-  const [dateRange, setDateRange] = useState('Last 28 days')
-  const [isDateDropdownOpen, setIsDateDropdownOpen] = useState(false)
+  const [dateRange, setDateRange] = useState({
+    startDate: new Date(2025, 11, 19),
+    endDate: new Date(2026, 0, 15),
+  })
   const [activeMetricTab, setActiveMetricTab] = useState('newUsers')
   const [userType, setUserType] = useState('all')
   const [isUserTypeDropdownOpen, setIsUserTypeDropdownOpen] = useState(false)
@@ -147,7 +150,6 @@ const Acquisition = () => {
   const [allUsersTableType, setAllUsersTableType] = useState('all')
   const [isAllUsersDropdownOpen, setIsAllUsersDropdownOpen] = useState(false)
   const [isDeviceDropdownOpen, setIsDeviceDropdownOpen] = useState(false)
-  const dateDropdownRef = useRef(null)
   const userTypeDropdownRef = useRef(null)
   const subscriptionDropdownRef = useRef(null)
   const monitoredDropdownRef = useRef(null)
@@ -156,9 +158,6 @@ const Acquisition = () => {
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (dateDropdownRef.current && !dateDropdownRef.current.contains(event.target)) {
-        setIsDateDropdownOpen(false)
-      }
       if (userTypeDropdownRef.current && !userTypeDropdownRef.current.contains(event.target)) {
         setIsUserTypeDropdownOpen(false)
       }
@@ -177,7 +176,7 @@ const Acquisition = () => {
     }
     document.addEventListener('mousedown', handleClickOutside)
     return () => document.removeEventListener('mousedown', handleClickOutside)
-  }, [isDateDropdownOpen, isUserTypeDropdownOpen, isSubscriptionDropdownOpen, isMonitoredDropdownOpen, isAllUsersDropdownOpen, isDeviceDropdownOpen])
+  }, [isUserTypeDropdownOpen, isSubscriptionDropdownOpen, isMonitoredDropdownOpen, isAllUsersDropdownOpen, isDeviceDropdownOpen])
 
   const scopeOptions = [
     'Portfolio',
@@ -189,15 +188,7 @@ const Acquisition = () => {
     'Nexipher',
   ]
 
-  const dateRangeOptions = [
-    { label: 'Last 7 days', range: 'Jan 9, 2026 – Jan 15, 2026' },
-    { label: 'Last 14 days', range: 'Jan 2, 2026 – Jan 15, 2026' },
-    { label: 'Last 28 days', range: 'Dec 19, 2025 – Jan 15, 2026' },
-    { label: 'Last 90 days', range: 'Oct 18, 2025 – Jan 15, 2026' },
-  ]
-
   const handleVPNChange = (vpn) => setSelectedVPN(vpn)
-  const currentDateRange = dateRangeOptions.find((opt) => opt.label === dateRange) || dateRangeOptions[2]
 
   // Left side (growth card): always total / all users
   const leftSideData = userTypeData.all
@@ -349,32 +340,12 @@ const Acquisition = () => {
                 How fast are users and devices growing, where is that growth coming from, and is it happening efficiently?
               </p>
             </div>
-            <div className={styles.pageHeaderRight} ref={dateDropdownRef}>
-              <div
-                className={styles.dateRangeSelector}
-                onClick={() => setIsDateDropdownOpen(!isDateDropdownOpen)}
-              >
-                <span className={styles.dateRangeLabel}>{dateRange}</span>
-                <span className={styles.dateRangeValue}>{currentDateRange.range}</span>
-                <span className={styles.dateRangeChevron}>▼</span>
-              </div>
-              {isDateDropdownOpen && (
-                <div className={styles.dateRangeDropdown}>
-                  {dateRangeOptions.map((option) => (
-                    <div
-                      key={option.label}
-                      className={`${styles.dateRangeOption} ${dateRange === option.label ? styles.dateRangeOptionActive : ''}`}
-                      onClick={() => {
-                        setDateRange(option.label)
-                        setIsDateDropdownOpen(false)
-                      }}
-                    >
-                      <span className={styles.dateRangeOptionLabel}>{option.label}</span>
-                      <span className={styles.dateRangeOptionRange}>{option.range}</span>
-                    </div>
-                  ))}
-                </div>
-              )}
+            <div className={styles.pageHeaderRight}>
+              <DateRangePicker
+                value={dateRange}
+                onChange={setDateRange}
+                presets={['Last 7 days', 'Last 14 days', 'Last 28 days', 'Last 90 days']}
+              />
             </div>
           </div>
 

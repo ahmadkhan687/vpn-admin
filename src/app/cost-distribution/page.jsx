@@ -1,9 +1,10 @@
 'use client'
 
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useRef } from 'react'
 import { ComposableMap, Geographies, Geography } from 'react-simple-maps'
 import Sidebar from '@/components/sidebar/Sidebar'
 import RealtimeReportSidebar from '@/components/realtime-report-sidebar/RealtimeReportSidebar'
+import DateRangePicker from '@/components/date-range-picker/DateRangePicker'
 import Header from '@/components/header/Header'
 import styles from './cost-distribution.module.css'
 import { topCostRegionDataByScope, getCostColor } from './topCostRegionData'
@@ -12,26 +13,17 @@ const geoUrl = 'https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json'
 
 const CostDistribution = () => {
   const [selectedVPN, setSelectedVPN] = useState('Portfolio')
-  const [dateRange, setDateRange] = useState('Last 28 days')
-  const [isDateDropdownOpen, setIsDateDropdownOpen] = useState(false)
+  const [dateRange, setDateRange] = useState({
+    startDate: new Date(2025, 11, 19),
+    endDate: new Date(2026, 0, 15),
+  })
   const [mapTooltipContent, setMapTooltipContent] = useState('')
   const [mapTooltipPosition, setMapTooltipPosition] = useState({ x: 0, y: 0 })
   const [barTooltipContent, setBarTooltipContent] = useState('')
   const [barTooltipPosition, setBarTooltipPosition] = useState({ x: 0, y: 0 })
   const [hoveredBarIndex, setHoveredBarIndex] = useState(null)
-  const dateDropdownRef = useRef(null)
   const mapRef = useRef(null)
   const barChartRef = useRef(null)
-
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (dateDropdownRef.current && !dateDropdownRef.current.contains(event.target)) {
-        setIsDateDropdownOpen(false)
-      }
-    }
-    document.addEventListener('mousedown', handleClickOutside)
-    return () => document.removeEventListener('mousedown', handleClickOutside)
-  }, [isDateDropdownOpen])
 
   // Define dropdown options for this page
   const scopeOptions = [
@@ -44,19 +36,10 @@ const CostDistribution = () => {
     'Nexipher',
   ]
 
-  const dateRangeOptions = [
-    { label: 'Last 7 days', range: 'Jan 9, 2026 – Jan 15, 2026' },
-    { label: 'Last 14 days', range: 'Jan 2, 2026 – Jan 15, 2026' },
-    { label: 'Last 28 days', range: 'Dec 19, 2025 – Jan 15, 2026' },
-    { label: 'Last 90 days', range: 'Oct 18, 2025 – Jan 15, 2026' },
-  ]
-
   // Handle VPN selection change from header dropdown
   const handleVPNChange = (vpn) => {
     setSelectedVPN(vpn)
   }
-
-  const currentDateRange = dateRangeOptions.find((opt) => opt.label === dateRange) || dateRangeOptions[2]
 
   // Get data for selected scope (Portfolio = overall, VPN = that VPN's data)
   const currentData = topCostRegionDataByScope[selectedVPN] || topCostRegionDataByScope.Portfolio
@@ -219,32 +202,12 @@ const CostDistribution = () => {
                 Where is our cost coming from, and how efficiently is it scaling with usage?
               </p>
             </div>
-            <div className={styles.pageHeaderRight} ref={dateDropdownRef}>
-              <div
-                className={styles.dateRangeSelector}
-                onClick={() => setIsDateDropdownOpen(!isDateDropdownOpen)}
-              >
-                <span className={styles.dateRangeLabel}>{dateRange}</span>
-                <span className={styles.dateRangeValue}>{currentDateRange.range}</span>
-                <span className={styles.dateRangeChevron}>▼</span>
-              </div>
-              {isDateDropdownOpen && (
-                <div className={styles.dateRangeDropdown}>
-                  {dateRangeOptions.map((option) => (
-                    <div
-                      key={option.label}
-                      className={`${styles.dateRangeOption} ${dateRange === option.label ? styles.dateRangeOptionActive : ''}`}
-                      onClick={() => {
-                        setDateRange(option.label)
-                        setIsDateDropdownOpen(false)
-                      }}
-                    >
-                      <span className={styles.dateRangeOptionLabel}>{option.label}</span>
-                      <span className={styles.dateRangeOptionRange}>{option.range}</span>
-                    </div>
-                  ))}
-                </div>
-              )}
+            <div className={styles.pageHeaderRight}>
+              <DateRangePicker
+                value={dateRange}
+                onChange={setDateRange}
+                presets={['Last 7 days', 'Last 14 days', 'Last 28 days', 'Last 90 days']}
+              />
             </div>
           </div>
 

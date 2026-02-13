@@ -5,6 +5,7 @@ import Sidebar from '@/components/sidebar/Sidebar'
 import RealtimeReportSidebar from '@/components/realtime-report-sidebar/RealtimeReportSidebar'
 import Header from '@/components/header/Header'
 import styles from './load-demand.module.css'
+import { getLoadDemandData } from './loadDemandData'
 
 const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
 const hours = [
@@ -20,21 +21,6 @@ const hours = [
   '6 PM',
   '8 PM',
   '10 PM',
-]
-
-const heatmapValues = [
-  [110, 160, 220, 210, 150, 130, 140],
-  [90, 120, 180, 190, 130, 110, 120],
-  [80, 100, 150, 160, 120, 100, 110],
-  [100, 140, 250, 230, 180, 150, 160],
-  [130, 190, 320, 280, 210, 160, 170],
-  [150, 210, 360, 300, 240, 170, 180],
-  [200, 280, 420, 360, 280, 190, 200],
-  [220, 310, 460, 410, 520, 320, 260],
-  [190, 270, 430, 520, 350, 260, 210],
-  [160, 240, 390, 510, 300, 210, 190],
-  [140, 200, 360, 300, 220, 150, 160],
-  [120, 170, 280, 240, 200, 140, 150],
 ]
 
 const getHeatColor = (value) => {
@@ -58,6 +44,7 @@ const LoadDemand = () => {
   ]
 
   const handleVPNChange = (vpn) => setSelectedVPN(vpn)
+  const loadData = getLoadDemandData(selectedVPN)
 
   return (
     <div className={`${styles.dashboardContainer} ${styles.withRealtimeSidebar}`}>
@@ -106,7 +93,7 @@ const LoadDemand = () => {
                   <div key={hour} className={styles.heatmapRow}>
                     <div className={styles.timeCell}>{hour}</div>
                     {days.map((day, colIndex) => {
-                      const value = heatmapValues[rowIndex][colIndex]
+                      const value = loadData.heatmapValues[rowIndex][colIndex]
                       return (
                         <div
                           key={`${hour}-${day}`}
@@ -135,18 +122,24 @@ const LoadDemand = () => {
             <div className={styles.heatmapStats}>
               <div className={styles.statCard}>
                 <div className={styles.statLabel}>Today</div>
-                <div className={styles.statValue}>6h 15m</div>
-                <div className={styles.statChangePositive}>2.3%</div>
+                <div className={styles.statValue}>{loadData.today}</div>
+                <div className={loadData.todayChange >= 0 ? styles.statChangePositive : styles.statChangeNegative}>
+                  {loadData.todayChange >= 0 ? '+' : ''}{loadData.todayChange}%
+                </div>
               </div>
               <div className={styles.statCard}>
                 <div className={styles.statLabel}>This week</div>
-                <div className={styles.statValue}>34h 12m</div>
-                <div className={styles.statChangeNegative}>10.1%</div>
+                <div className={styles.statValue}>{loadData.thisWeek}</div>
+                <div className={loadData.weekChange >= 0 ? styles.statChangePositive : styles.statChangeNegative}>
+                  {loadData.weekChange >= 0 ? '+' : ''}{loadData.weekChange}%
+                </div>
               </div>
               <div className={styles.statCard}>
                 <div className={styles.statLabel}>This month</div>
-                <div className={styles.statValue}>123h 47m</div>
-                <div className={styles.statChangeNegative}>3.2%</div>
+                <div className={styles.statValue}>{loadData.thisMonth}</div>
+                <div className={loadData.monthChange >= 0 ? styles.statChangePositive : styles.statChangeNegative}>
+                  {loadData.monthChange >= 0 ? '+' : ''}{loadData.monthChange}%
+                </div>
               </div>
             </div>
           </div>

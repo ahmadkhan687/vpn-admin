@@ -6,6 +6,7 @@ import Sidebar from '@/components/sidebar/Sidebar'
 import Header from '@/components/header/Header'
 import styles from './dashboard.module.css'
 import { vpnData } from './vpnData'
+import { alertsByVPN, alertsToDashboardFormat } from '@/app/alerts/alertsData'
 
 const Dashboard = () => {
   const [expandedCategory, setExpandedCategory] = useState(null)
@@ -23,12 +24,16 @@ const Dashboard = () => {
     'Nexipher',
   ]
 
-  // Get data for selected VPN
+  // Get data for selected VPN - alerts come from shared alertsData (same as Alerts page)
   const currentVPNData = vpnData[selectedVPN] || vpnData['Portfolio']
   const kpiData = currentVPNData.kpiData
-  const alerts = currentVPNData.alerts
+  const vpnAlerts = alertsByVPN[selectedVPN] || alertsByVPN.Portfolio
+  const alerts = alertsToDashboardFormat(vpnAlerts)
   const categoryCards = currentVPNData.categoryCards
-  const healthStatus = currentVPNData.healthStatus
+  const healthStatus = {
+    ...currentVPNData.healthStatus,
+    activeIssues: vpnAlerts.length,
+  }
 
   // Handle VPN selection change from header dropdown
   const handleVPNChange = (vpn) => {
@@ -516,7 +521,7 @@ const Dashboard = () => {
                         <div className={styles.alertDescription}>
                           {alert.description}
                         </div>
-                        <a href="#" className={styles.alertLink}>
+                        <a href="/alerts" className={styles.alertLink}>
                           {alert.link} →
                         </a>
                       </div>

@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState, useRef } from 'react'
+import Link from 'next/link'
 import GaugeChart from 'react-gauge-chart'
 import { ComposableMap, Geographies, Geography } from 'react-simple-maps'
 import Sidebar from '@/components/sidebar/Sidebar'
@@ -689,8 +690,8 @@ const KPISummary = () => {
     )
   }
 
-  // Helper function to render KPI card
-  const renderKPICard = (title, data, comparisonData = null) => {
+  // Helper function to render KPI card (breakdownPath = link for View Breakdown)
+  const renderKPICard = (title, data, comparisonData = null, breakdownPath = null) => {
     if (!data) return null
     
     const statusClass = {
@@ -779,7 +780,11 @@ const KPISummary = () => {
             </div>
           </div>
           <div className={styles.comparisonCardFooter}>
-            <button className={styles.viewBreakdownBtn}>View Breakdown →</button>
+            {breakdownPath ? (
+              <Link href={breakdownPath} className={styles.viewBreakdownBtn}>View Breakdown →</Link>
+            ) : (
+              <button className={styles.viewBreakdownBtn}>View Breakdown →</button>
+            )}
           </div>
         </div>
       )
@@ -808,7 +813,11 @@ const KPISummary = () => {
             </div>
           )}
         </div>
-        <button className={styles.viewBreakdownBtn}>View Breakdown →</button>
+        {breakdownPath ? (
+          <Link href={breakdownPath} className={styles.viewBreakdownBtn}>View Breakdown →</Link>
+        ) : (
+          <button className={styles.viewBreakdownBtn}>View Breakdown →</button>
+        )}
       </div>
     )
   }
@@ -970,14 +979,13 @@ const KPISummary = () => {
                 <div className={styles.kpiSection}>
                   <div className={styles.sectionHeader}>
                     <button className={styles.sectionTitlePill}>Cost and Unit Economics</button>
-                    <a href="#" className={styles.viewAllLink}>View All Metrics →</a>
                   </div>
                   <p className={styles.sectionQuestion}>Is the Business Growing Profitably?</p>
                   <div className={styles.kpiCardsGrid}>
-                    {renderKPICard('COST PER ACTIVE USER', currentKPIData.costAndUnitEconomics.costPerActiveUser)}
-                    {renderKPICard('EGRESS GB PER MINUTE', currentKPIData.costAndUnitEconomics.egressGBPerMinute)}
-                    {renderKPICard('COST PER GB', currentKPIData.costAndUnitEconomics.costPerGB)}
-                    {renderKPICard('FREE USER COST SHARE', currentKPIData.costAndUnitEconomics.freeUserCostShare)}
+                    {renderKPICard('COST PER ACTIVE USER', currentKPIData.costAndUnitEconomics.costPerActiveUser, null, '/cost-efficiency')}
+                    {renderKPICard('EGRESS GB PER MINUTE', currentKPIData.costAndUnitEconomics.egressGBPerMinute, null, '/cost-efficiency')}
+                    {renderKPICard('COST PER GB', currentKPIData.costAndUnitEconomics.costPerGB, null, '/cost-efficiency')}
+                    {renderKPICard('FREE USER COST SHARE', currentKPIData.costAndUnitEconomics.freeUserCostShare, null, '/cost-distribution')}
                   </div>
                 </div>
 
@@ -985,7 +993,6 @@ const KPISummary = () => {
                 <div className={styles.kpiSection}>
                   <div className={styles.sectionHeader}>
                     <button className={styles.sectionTitlePill}>Growth and Performance</button>
-                    <a href="#" className={styles.viewAllLink}>View All Metrics →</a>
                   </div>
                   <p className={styles.sectionQuestion}>Are we attracting and converting new users?</p>
                   <div className={styles.kpiCardsGrid}>
@@ -1001,24 +1008,22 @@ const KPISummary = () => {
                   <div className={styles.kpiSection}>
                     <div className={styles.sectionHeader}>
                       <button className={styles.sectionTitlePill}>Network Health and Stability</button>
-                      <a href="#" className={styles.viewAllLink}>View All Metrics →</a>
                     </div>
                     <p className={styles.sectionQuestion}>Are Users engaged and satisfied?</p>
                     <div className={styles.kpiCardsGrid}>
-                      {renderKPICard('ACTIVE TUNNELS', currentKPIData.networkHealth.activeTunnels)}
-                      {renderKPICard('MEDIAN LATENCY', currentKPIData.networkHealth.medianLatency)}
+                      {renderKPICard('ACTIVE TUNNELS', currentKPIData.networkHealth.activeTunnels, null, '/network-overview')}
+                      {renderKPICard('MEDIAN LATENCY', currentKPIData.networkHealth.medianLatency, null, '/performance-quality')}
                     </div>
                   </div>
 
                   <div className={styles.kpiSection}>
                     <div className={styles.sectionHeader}>
                       <button className={styles.sectionTitlePill}>Protocol and Traffic Mix</button>
-                      <a href="#" className={styles.viewAllLink}>View All Metrics →</a>
                     </div>
                     <p className={styles.sectionQuestion}>Is the platform secure and compliant?</p>
                     <div className={styles.kpiCardsGrid}>
-                      {renderKPICard('AVG SESSION DURATION', currentKPIData.protocolAndTraffic.avgSessionDuration)}
-                      {renderKPICard('EGRESS PER SESSION', currentKPIData.protocolAndTraffic.egressPerSession)}
+                      {renderKPICard('AVG SESSION DURATION', currentKPIData.protocolAndTraffic.avgSessionDuration, null, '/session-behavior')}
+                      {renderKPICard('EGRESS PER SESSION', currentKPIData.protocolAndTraffic.egressPerSession, null, '/session-behavior')}
                     </div>
                   </div>
                 </div>
@@ -1028,24 +1033,22 @@ const KPISummary = () => {
                   <div className={styles.kpiSection}>
                     <div className={styles.sectionHeader}>
                       <button className={styles.sectionTitlePill}>Capacity and Scaling</button>
-                      <a href="#" className={styles.viewAllLink}>View All Metrics →</a>
                     </div>
                     <p className={styles.sectionQuestion}>Are Users engaged and satisfied?</p>
                     <div className={styles.kpiCardsGrid}>
-                      {renderKPICard('CURRENT UTILIZATION', currentKPIData.capacityAndScaling.currentUtilization)}
-                      {renderKPICard('SESSIONS PER NODE', currentKPIData.capacityAndScaling.sessionsPerNode)}
+                      {renderKPICard('CURRENT UTILIZATION', currentKPIData.capacityAndScaling.currentUtilization, null, '/current-capacity')}
+                      {renderKPICard('SESSIONS PER NODE', currentKPIData.capacityAndScaling.sessionsPerNode, null, '/infrastructure-distribution')}
                     </div>
                   </div>
 
                   <div className={styles.kpiSection}>
                     <div className={styles.sectionHeader}>
                       <button className={styles.sectionTitlePill}>Compliance and Governance</button>
-                      <a href="#" className={styles.viewAllLink}>View All Metrics →</a>
                     </div>
                     <p className={styles.sectionQuestion}>Is the platform secure and compliant?</p>
                     <div className={styles.kpiCardsGrid}>
-                      {renderKPICard('IPDR ACCESS COUNT', currentKPIData.complianceAndGovernance.ipdrAccessCount)}
-                      {renderKPICard('LEGAL REQUEST SLA', currentKPIData.complianceAndGovernance.legalRequestSLA)}
+                      {renderKPICard('IPDR ACCESS COUNT', currentKPIData.complianceAndGovernance.ipdrAccessCount, null, '/ipdr')}
+                      {renderKPICard('LEGAL REQUEST SLA', currentKPIData.complianceAndGovernance.legalRequestSLA, null, '/retention-compliance')}
                     </div>
                   </div>
                 </div>
@@ -1190,7 +1193,6 @@ const KPISummary = () => {
                         <div className={styles.kpiSection}>
                           <div className={styles.sectionHeader}>
                             <button className={styles.sectionTitlePill}>Cost and Unit Economics</button>
-                            <a href="#" className={styles.viewAllLink}>View All Metrics →</a>
                           </div>
                           <p className={styles.sectionQuestion}>Is the VPN Growing Profitably?</p>
                           <div className={styles.kpiCardsGrid}>
@@ -1201,7 +1203,8 @@ const KPISummary = () => {
                                 : currentKPIData.costAndUnitEconomics.costPerActiveUser,
                               isComparisonMode && comparisonVPNs.length === 2 
                                 ? (kpiSummaryData[comparisonVPNs[1]] || kpiSummaryData['Portfolio']).costAndUnitEconomics.costPerActiveUser
-                                : null
+                                : null,
+                              '/cost-efficiency'
                             )}
                             {renderKPICard(
                               'EGRESS GB PER MINUTE',
@@ -1210,7 +1213,8 @@ const KPISummary = () => {
                                 : currentKPIData.costAndUnitEconomics.egressGBPerMinute,
                               isComparisonMode && comparisonVPNs.length === 2 
                                 ? (kpiSummaryData[comparisonVPNs[1]] || kpiSummaryData['Portfolio']).costAndUnitEconomics.egressGBPerMinute
-                                : null
+                                : null,
+                              '/cost-efficiency'
                             )}
                             {renderKPICard(
                               'COST PER GB',
@@ -1219,7 +1223,8 @@ const KPISummary = () => {
                                 : currentKPIData.costAndUnitEconomics.costPerGB,
                               isComparisonMode && comparisonVPNs.length === 2 
                                 ? (kpiSummaryData[comparisonVPNs[1]] || kpiSummaryData['Portfolio']).costAndUnitEconomics.costPerGB
-                                : null
+                                : null,
+                              '/cost-efficiency'
                             )}
                             {renderKPICard(
                               'FREE USER COST SHARE',
@@ -1228,7 +1233,8 @@ const KPISummary = () => {
                                 : currentKPIData.costAndUnitEconomics.freeUserCostShare,
                               isComparisonMode && comparisonVPNs.length === 2 
                                 ? (kpiSummaryData[comparisonVPNs[1]] || kpiSummaryData['Portfolio']).costAndUnitEconomics.freeUserCostShare
-                                : null
+                                : null,
+                              '/cost-distribution'
                             )}
                           </div>
                         </div>
@@ -1237,7 +1243,6 @@ const KPISummary = () => {
                         <div className={styles.kpiSection}>
                           <div className={styles.sectionHeader}>
                             <button className={styles.sectionTitlePill}>Growth and Performance</button>
-                            <a href="#" className={styles.viewAllLink}>View All Metrics →</a>
                           </div>
                           <p className={styles.sectionQuestion}>Are we attracting and converting new users?</p>
                           <div className={styles.kpiCardsGrid}>
@@ -1285,7 +1290,6 @@ const KPISummary = () => {
                           <div className={styles.kpiSection}>
                             <div className={styles.sectionHeader}>
                               <button className={styles.sectionTitlePill}>Network Health and Stability</button>
-                              <a href="#" className={styles.viewAllLink}>View All Metrics →</a>
                             </div>
                             <p className={styles.sectionQuestion}>Are Users engaged and satisfied?</p>
                             <div className={styles.kpiCardsGrid}>
@@ -1296,7 +1300,8 @@ const KPISummary = () => {
                                   : currentKPIData.networkHealth.activeTunnels,
                                 isComparisonMode && comparisonVPNs.length === 2 
                                   ? (kpiSummaryData[comparisonVPNs[1]] || kpiSummaryData['Portfolio']).networkHealth.activeTunnels
-                                  : null
+                                  : null,
+                                '/network-overview'
                               )}
                               {renderKPICard(
                                 'MEDIAN LATENCY',
@@ -1305,7 +1310,8 @@ const KPISummary = () => {
                                   : currentKPIData.networkHealth.medianLatency,
                                 isComparisonMode && comparisonVPNs.length === 2 
                                   ? (kpiSummaryData[comparisonVPNs[1]] || kpiSummaryData['Portfolio']).networkHealth.medianLatency
-                                  : null
+                                  : null,
+                                '/performance-quality'
                               )}
                             </div>
                           </div>
@@ -1313,7 +1319,6 @@ const KPISummary = () => {
                           <div className={styles.kpiSection}>
                             <div className={styles.sectionHeader}>
                               <button className={styles.sectionTitlePill}>Protocol and Traffic Mix</button>
-                              <a href="#" className={styles.viewAllLink}>View All Metrics →</a>
                             </div>
                             <p className={styles.sectionQuestion}>Is the platform secure and compliant?</p>
                             <div className={styles.kpiCardsGrid}>
@@ -1324,7 +1329,8 @@ const KPISummary = () => {
                                   : currentKPIData.protocolAndTraffic.avgSessionDuration,
                                 isComparisonMode && comparisonVPNs.length === 2 
                                   ? (kpiSummaryData[comparisonVPNs[1]] || kpiSummaryData['Portfolio']).protocolAndTraffic.avgSessionDuration
-                                  : null
+                                  : null,
+                                '/session-behavior'
                               )}
                               {renderKPICard(
                                 'EGRESS PER SESSION',
@@ -1333,7 +1339,8 @@ const KPISummary = () => {
                                   : currentKPIData.protocolAndTraffic.egressPerSession,
                                 isComparisonMode && comparisonVPNs.length === 2 
                                   ? (kpiSummaryData[comparisonVPNs[1]] || kpiSummaryData['Portfolio']).protocolAndTraffic.egressPerSession
-                                  : null
+                                  : null,
+                                '/session-behavior'
                               )}
                             </div>
                           </div>
@@ -1344,7 +1351,6 @@ const KPISummary = () => {
                           <div className={styles.kpiSection}>
                             <div className={styles.sectionHeader}>
                               <button className={styles.sectionTitlePill}>Capacity and Scaling</button>
-                              <a href="#" className={styles.viewAllLink}>View All Metrics →</a>
                             </div>
                             <p className={styles.sectionQuestion}>Are Users engaged and satisfied?</p>
                             <div className={styles.kpiCardsGrid}>
@@ -1355,7 +1361,8 @@ const KPISummary = () => {
                                   : currentKPIData.capacityAndScaling.currentUtilization,
                                 isComparisonMode && comparisonVPNs.length === 2 
                                   ? (kpiSummaryData[comparisonVPNs[1]] || kpiSummaryData['Portfolio']).capacityAndScaling.currentUtilization
-                                  : null
+                                  : null,
+                                '/current-capacity'
                               )}
                               {renderKPICard(
                                 'SESSIONS PER NODE',
@@ -1364,7 +1371,8 @@ const KPISummary = () => {
                                   : currentKPIData.capacityAndScaling.sessionsPerNode,
                                 isComparisonMode && comparisonVPNs.length === 2 
                                   ? (kpiSummaryData[comparisonVPNs[1]] || kpiSummaryData['Portfolio']).capacityAndScaling.sessionsPerNode
-                                  : null
+                                  : null,
+                                '/infrastructure-distribution'
                               )}
                             </div>
                           </div>
@@ -1372,7 +1380,6 @@ const KPISummary = () => {
                           <div className={styles.kpiSection}>
                             <div className={styles.sectionHeader}>
                               <button className={styles.sectionTitlePill}>Compliance and Governance</button>
-                              <a href="#" className={styles.viewAllLink}>View All Metrics →</a>
                             </div>
                             <p className={styles.sectionQuestion}>Is the platform secure and compliant?</p>
                             <div className={styles.kpiCardsGrid}>
@@ -1383,7 +1390,8 @@ const KPISummary = () => {
                                   : currentKPIData.complianceAndGovernance.ipdrAccessCount,
                                 isComparisonMode && comparisonVPNs.length === 2 
                                   ? (kpiSummaryData[comparisonVPNs[1]] || kpiSummaryData['Portfolio']).complianceAndGovernance.ipdrAccessCount
-                                  : null
+                                  : null,
+                                '/ipdr'
                               )}
                               {renderKPICard(
                                 'LEGAL REQUEST SLA',
@@ -1392,7 +1400,8 @@ const KPISummary = () => {
                                   : currentKPIData.complianceAndGovernance.legalRequestSLA,
                                 isComparisonMode && comparisonVPNs.length === 2 
                                   ? (kpiSummaryData[comparisonVPNs[1]] || kpiSummaryData['Portfolio']).complianceAndGovernance.legalRequestSLA
-                                  : null
+                                  : null,
+                                '/retention-compliance'
                               )}
                             </div>
                           </div>

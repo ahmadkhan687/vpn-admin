@@ -167,6 +167,140 @@
   font-weight: 500;
 }
 
+/* Sessions Per Node */
+.sessionsCard {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.sessionsTitle {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1a1a1a;
+  font-family: var(--dashboard-fontFamily);
+  margin: 0 0 20px 0;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #d1d5db;
+  width: fit-content;
+}
+
+.nodesGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.nodeBox {
+  border-radius: 8px;
+  padding: 20px;
+  min-height: 120px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+}
+
+.nodeColorRed {
+  background: #dc2626;
+}
+
+.nodeColorOrange {
+  background: #f97316;
+}
+
+.nodeColorLightBlue {
+  background: #38bdf8;
+}
+
+.nodeColorGreen {
+  background: #22c55e;
+}
+
+.nodeHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.nodeName {
+  font-size: 18px;
+  font-weight: 700;
+  color: #fff;
+  font-family: var(--dashboard-fontFamily);
+}
+
+.overLimitBadge {
+  font-size: 11px;
+  font-weight: 600;
+  color: #dc2626;
+  background: #fff;
+  border: 1px solid #fff;
+  border-radius: 9999px;
+  padding: 4px 10px;
+  font-family: var(--dashboard-fontFamily);
+  white-space: nowrap;
+}
+
+.nodeSessions {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.95);
+  font-family: var(--dashboard-fontFamily);
+  margin-top: 4px;
+}
+
+.nodeUtilized {
+  font-size: 16px;
+  font-weight: 700;
+  color: #fff;
+  font-family: var(--dashboard-fontFamily);
+  margin-top: 4px;
+}
+
+.legend {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  flex-wrap: wrap;
+  padding-top: 16px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #1a1a1a;
+  font-family: var(--dashboard-fontFamily);
+}
+
+.legendSwatch {
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+}
+
+.legendGreen {
+  background: #22c55e;
+}
+
+.legendLightBlue {
+  background: #38bdf8;
+}
+
+.legendOrange {
+  background: #f97316;
+}
+
+.legendRed {
+  background: #dc2626;
+}
+
 @media (max-width: 1366px) {
   .withRealtimeSidebar .mainContent {
     margin-left: 310px;
@@ -221,6 +355,16 @@
   }
 
   .metricsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .nodesGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .nodesGrid {
     grid-template-columns: 1fr;
   }
 }

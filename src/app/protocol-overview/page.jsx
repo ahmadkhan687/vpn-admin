@@ -1,45 +1,24 @@
 'use client'
 
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState } from 'react'
 import Sidebar from '@/components/sidebar/Sidebar'
 import RealtimeReportSidebar from '@/components/realtime-report-sidebar/RealtimeReportSidebar'
 import Header from '@/components/header/Header'
 import styles from './protocol-overview.module.css'
-
-const PROTOCOL_DATA = [
-  { label: 'HTTPS', value: 41.8 },
-  { label: 'DNS', value: 25.6 },
-  { label: 'TCP', value: 19.6 },
-  { label: 'UDP', value: 9.7 },
-  { label: 'Other', value: 3.4 },
-]
+import DateRangePicker from '@/components/date-range-picker/DateRangePicker'
+import { getProtocolOverviewData } from './protocolOverviewData'
 
 const ProtocolOverview = () => {
   const [selectedVPN, setSelectedVPN] = useState('Portfolio')
-  const [dateRange, setDateRange] = useState('Last 28 days')
-  const [isDateDropdownOpen, setIsDateDropdownOpen] = useState(false)
-  const dateDropdownRef = useRef(null)
-
-  useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (dateDropdownRef.current && !dateDropdownRef.current.contains(e.target)) {
-        setIsDateDropdownOpen(false)
-      }
-    }
-    document.addEventListener('mousedown', handleClickOutside)
-    return () => document.removeEventListener('mousedown', handleClickOutside)
-  }, [isDateDropdownOpen])
+  const [dateRange, setDateRange] = useState({
+    startDate: new Date(2025, 11, 19),
+    endDate: new Date(2026, 0, 15),
+  })
 
   const scopeOptions = ['Portfolio', 'Steer Lucid', 'Crest', 'Slick', 'Fortivo', 'Qucik', 'Nexipher']
-  const dateRangeOptions = [
-    { label: 'Last 7 days', range: 'Jan 9, 2026 – Jan 15, 2026' },
-    { label: 'Last 14 days', range: 'Jan 2, 2026 – Jan 15, 2026' },
-    { label: 'Last 28 days', range: 'Dec 19, 2025 – Jan 15, 2026' },
-    { label: 'Last 90 days', range: 'Oct 18, 2025 – Jan 15, 2026' },
-  ]
-  const currentDateRange = dateRangeOptions.find((o) => o.label === dateRange) || dateRangeOptions[2]
 
   const handleVPNChange = (vpn) => setSelectedVPN(vpn)
+  const protocolData = getProtocolOverviewData(selectedVPN)
 
   const renderProtocolBarChart = () => {
     const width = 700
@@ -47,7 +26,7 @@ const ProtocolOverview = () => {
     const padding = { top: 12, right: 70, bottom: 36, left: 80 }
     const chartWidth = width - padding.left - padding.right
     const chartHeight = height - padding.top - padding.bottom
-    const barHeight = (chartHeight / PROTOCOL_DATA.length) - 14
+    const barHeight = (chartHeight / protocolData.length) - 14
     const maxVal = 100
 
     return (
@@ -64,7 +43,7 @@ const ProtocolOverview = () => {
             strokeWidth="1"
           />
         ))}
-        {PROTOCOL_DATA.map((item, i) => {
+        {protocolData.map((item, i) => {
           const y = padding.top + i * (barHeight + 14) + barHeight / 2
           const barW = (item.value / maxVal) * chartWidth
           return (
@@ -125,26 +104,12 @@ const ProtocolOverview = () => {
                 How fast are users and devices growing, where is that growth coming from, and is it happening efficiently?
               </p>
             </div>
-            <div className={styles.pageHeaderRight} ref={dateDropdownRef}>
-              <div className={styles.dateRangeSelector} onClick={() => setIsDateDropdownOpen(!isDateDropdownOpen)}>
-                <span className={styles.dateRangeLabel}>{dateRange}</span>
-                <span className={styles.dateRangeValue}>{currentDateRange.range}</span>
-                <span className={styles.dateRangeChevron}>▼</span>
-              </div>
-              {isDateDropdownOpen && (
-                <div className={styles.dateRangeDropdown}>
-                  {dateRangeOptions.map((opt) => (
-                    <div
-                      key={opt.label}
-                      className={`${styles.dateRangeOption} ${dateRange === opt.label ? styles.dateRangeOptionActive : ''}`}
-                      onClick={() => { setDateRange(opt.label); setIsDateDropdownOpen(false) }}
-                    >
-                      <span className={styles.dateRangeOptionLabel}>{opt.label}</span>
-                      <span className={styles.dateRangeOptionRange}>{opt.range}</span>
-                    </div>
-                  ))}
-                </div>
-              )}
+            <div className={styles.pageHeaderRight}>
+              <DateRangePicker
+                value={dateRange}
+                onChange={setDateRange}
+                presets={['Last 7 days', 'Last 14 days', 'Last 28 days', 'Last 90 days']}
+              />
             </div>
           </div>
 

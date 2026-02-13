@@ -372,6 +372,8 @@
   text-align: left;
   transition: color 0.2s ease;
   margin-top: 4px;
+  text-decoration: none;
+  display: inline-block;
 }
 
 .viewBreakdownBtn:hover {

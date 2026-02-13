@@ -1,9 +1,10 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Sidebar from '@/components/sidebar/Sidebar'
 import Header from '@/components/header/Header'
-import { alertsData, mostAffectedArea } from './alertsData'
+import DateRangePicker from '@/components/date-range-picker/DateRangePicker'
+import { alertsByVPN, mostAffectedAreaByVPN } from './alertsData'
 import styles from './alerts.module.css'
 
 const scopeOptions = [
@@ -16,30 +17,61 @@ const scopeOptions = [
   'Nexipher',
 ]
 
+const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+
+const expandTo12Months = (arr) => {
+  if (!arr?.length) return []
+  if (arr.length >= 12) return arr.slice(0, 12)
+  const out = []
+  for (let i = 0; i < 12; i++) {
+    const t = i / 11
+    const idx = t * (arr.length - 1)
+    const lo = Math.floor(idx)
+    const hi = Math.min(lo + 1, arr.length - 1)
+    const f = idx - lo
+    out.push(arr[lo] + f * (arr[hi] - arr[lo]))
+  }
+  return out
+}
+
 const Alerts = () => {
   const [selectedVPN, setSelectedVPN] = useState('Portfolio')
   const [filterTab, setFilterTab] = useState('all') // 'all' | 'critical'
-  const [selectedAlert, setSelectedAlert] = useState(alertsData[0])
-  const [dateRange, setDateRange] = useState('Last 28 days')
-  const [dateRangeValue, setDateRangeValue] = useState('Dec 19, 2025 - Jan 15, 2026')
+  const vpnAlerts = alertsByVPN[selectedVPN] || alertsByVPN.Portfolio
+  const [selectedAlert, setSelectedAlert] = useState(vpnAlerts[0] || null)
+  const [dateRange, setDateRange] = useState({
+    startDate: new Date(2025, 11, 19),
+    endDate: new Date(2026, 0, 15),
+  })
   const [currentPage, setCurrentPage] = useState(1)
+
+  useEffect(() => {
+    const alerts = alertsByVPN[selectedVPN] || alertsByVPN.Portfolio
+    setSelectedAlert(alerts[0] || null)
+    setCurrentPage(1)
+  }, [selectedVPN])
+
+  const [chartMonthStart, setChartMonthStart] = useState(0) // 0-7, show 5 months at a time
   const itemsPerPage = 7
-  const totalPages = 2
 
   const filteredAlerts =
     filterTab === 'critical'
-      ? alertsData.filter((a) => a.severity === 'Critical')
-      : alertsData
+      ? vpnAlerts.filter((a) => a.severity === 'Critical')
+      : vpnAlerts
 
-  const paginatedAlerts = filteredAlerts.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
+  const totalPages = Math.max(1, Math.ceil(filteredAlerts.length / itemsPerPage))
+  const safePage = Math.min(currentPage, totalPages)
+  const paginatedAlertsSafe = filteredAlerts.slice(
+    (safePage - 1) * itemsPerPage,
+    safePage * itemsPerPage
   )
 
-  const criticalCount = 5
-  const warningCount = 5
-  const infoCount = 4
-  const activeCount = 17
+  const criticalCount = vpnAlerts.filter((a) => a.severity === 'Critical').length
+  const warningCount = vpnAlerts.filter((a) => a.severity === 'Warning').length
+  const infoCount = vpnAlerts.filter((a) => a.severity === 'Informational').length
+  const activeCount = vpnAlerts.length
+
+  const mostAffectedArea = mostAffectedAreaByVPN[selectedVPN] || mostAffectedAreaByVPN.Portfolio
 
   const getSeverityClass = (severity) => {
     switch (severity) {
@@ -67,23 +99,30 @@ const Alerts = () => {
     }
   }
 
-  // Chart dimensions for selected alert
+  // Chart - 5 months visible, arrows scroll month window, Y-axis 0-100
+  const monthsVisible = 5
+  const maxMonthStart = 12 - monthsVisible
   const chartWidth = 280
   const chartHeight = 120
-  const chartData = selectedAlert?.chartData || []
-  const chartLabels = selectedAlert?.chartLabels || []
-  const maxVal = Math.max(...chartData, 1)
-  const minVal = Math.min(...chartData, 0)
+  const rawChartData = expandTo12Months(selectedAlert?.chartData || [])
+  const chartData = rawChartData.slice(chartMonthStart, chartMonthStart + monthsVisible)
+  const chartLabels = MONTHS.slice(chartMonthStart, chartMonthStart + monthsVisible)
+  const maxVal = Math.max(...rawChartData, 1)
+  const minVal = Math.min(...rawChartData, 0)
   const range = maxVal - minVal || 1
-  const pad = { top: 10, right: 10, bottom: 24, left: 30 }
+  const isReconnectChart = selectedAlert?.alertName === 'Reconnect Frequency'
+  const yScale = 100 // Y-axis 0 to 100
+  const pad = { top: 10, right: 10, bottom: 24, left: 36 }
   const innerW = chartWidth - pad.left - pad.right
   const innerH = chartHeight - pad.top - pad.bottom
   const points = chartData.map((val, i) => {
     const x = pad.left + (i / (chartData.length - 1 || 1)) * innerW
-    const y = pad.top + innerH - ((val - minVal) / range) * innerH
+    const norm = isReconnectChart ? Math.min(val / yScale, 1) : (val - minVal) / range
+    const y = pad.top + innerH - norm * innerH
     return { x, y, val }
   })
   const linePath = points.map((p, i) => (i === 0 ? 'M' : 'L') + ` ${p.x} ${p.y}`).join(' ')
+  const monthRangeLabel = `${chartLabels[0]} - ${chartLabels[chartLabels.length - 1]}`
 
   return (
     <div className={styles.alertsContainer}>
@@ -95,24 +134,47 @@ const Alerts = () => {
           onValueChange={setSelectedVPN}
         />
         <div className={styles.content}>
+          {/* Top bar: Alerts + Last Updated left, Date range right */}
+          <div className={styles.topBar}>
+            <div className={styles.topBarLeft}>
+              <h2 className={styles.pageTitle}>Alerts</h2>
+              <div className={styles.lastUpdated}>
+                <span className={styles.refreshIcon}>↻</span>
+                <span>Last Updated Now</span>
+              </div>
+            </div>
+            <div className={styles.dateRangeWrapper}>
+              <DateRangePicker
+                value={dateRange}
+                onChange={setDateRange}
+                presets={['Last 7 days', 'Last 14 days', 'Last 28 days', 'Last 90 days']}
+              />
+            </div>
+          </div>
+
           <div className={styles.twoColumnLayout}>
             {/* Left column - Alerts list */}
             <div className={styles.leftColumn}>
-              <div className={styles.pageHeader}>
-                <h2 className={styles.pageTitle}>Alerts</h2>
-                <div className={styles.lastUpdated}>
-                  <span className={styles.refreshIcon}>↻</span>
-                  <span>Last Updated Now</span>
+              {/* Summary row: 17 Active Alerts + severity pills | Most affected area card */}
+              <div className={styles.summaryRow}>
+                <div className={styles.summaryCard}>
+                  <div className={styles.summaryLeft}>
+                    <span className={styles.summaryNumber}>{activeCount}</span>
+                    <span className={styles.summaryLabel}>Active Alerts</span>
+                  </div>
+                  <div className={styles.summarySeparator} />
+                  <div className={styles.severityBadges}>
+                    <span className={styles.badgeCritical}>{criticalCount} Critical</span>
+                    <span className={styles.badgeWarning}>{warningCount} Warning</span>
+                    <span className={styles.badgeInfo}>{infoCount} Informational</span>
+                  </div>
                 </div>
-              </div>
-
-              {/* Summary card */}
-              <div className={styles.summaryCard}>
-                <span className={styles.summaryCount}>{activeCount} Active Alerts</span>
-                <div className={styles.severityBadges}>
-                  <span className={styles.badgeCritical}>{criticalCount} Critical</span>
-                  <span className={styles.badgeWarning}>{warningCount} Warning</span>
-                  <span className={styles.badgeInfo}>{infoCount} Informational</span>
+                <div className={styles.affectedCard}>
+                  <div className={styles.affectedLabel}>Most affected area:</div>
+                  <span className={styles.affectedTextDotted}>{mostAffectedArea.label}</span>
+                  <div className={styles.affectedPillWrap}>
+                    <span className={styles.affectedPill}>{mostAffectedArea.percentage}</span>
+                  </div>
                 </div>
               </div>
 
@@ -138,20 +200,16 @@ const Alerts = () => {
                 <table className={styles.alertsTable}>
                   <thead>
                     <tr>
-                      <th>Severity</th>
-                      <th>Alert</th>
-                      <th>Category</th>
-                      <th>Metric Breached</th>
-                      <th>
-                        First Breached <span className={styles.sortArrow}>▼</span>
-                      </th>
-                      <th>
-                        Status <span className={styles.sortArrow}>▼</span>
-                      </th>
+                      <th>Severity <span className={styles.sortArrow}>▼</span></th>
+                      <th>Alert <span className={styles.sortArrow}>▼</span></th>
+                      <th>Category <span className={styles.sortArrow}>▼</span></th>
+                      <th>Metric Breached <span className={styles.sortArrow}>▼</span></th>
+                      <th>First Breached <span className={styles.sortArrow}>▼</span></th>
+                      <th>Status <span className={styles.sortArrow}>▼</span></th>
                     </tr>
                   </thead>
                   <tbody>
-                    {paginatedAlerts.map((alert) => (
+                    {paginatedAlertsSafe.map((alert) => (
                       <tr
                         key={alert.id}
                         className={`${styles.tableRow} ${
@@ -163,7 +221,9 @@ const Alerts = () => {
                           <span
                             className={`${styles.severityBadge} ${getSeverityClass(alert.severity)}`}
                           >
-                            {alert.severityCount} {alert.severity}
+                            {typeof alert.severityCount === 'string'
+                              ? alert.severityCount
+                              : `${alert.severityCount} ${alert.severity}`}
                           </span>
                         </td>
                         <td>
@@ -172,15 +232,27 @@ const Alerts = () => {
                             <span className={styles.alertRegion}>{alert.alertRegion}</span>
                           </div>
                         </td>
-                        <td>{alert.category}</td>
+                        <td>
+                          <div className={styles.categoryCell}>
+                            <span className={styles.categoryMain}>{alert.category}</span>
+                            {(alert.categorySub || alert.alertRegion) && (
+                              <span className={styles.categorySub}>
+                                {alert.categorySub || alert.alertRegion}
+                              </span>
+                            )}
+                          </div>
+                        </td>
                         <td>{alert.metricBreached}</td>
                         <td>{alert.firstBreached}</td>
                         <td>
                           <span
-                            className={`${styles.statusBadge} ${getStatusClass(alert.status)}`}
+                            className={`${styles.statusBadge} ${getStatusClass(alert.status)} ${
+                              alert.severity === 'Informational' && alert.status === 'Open'
+                                ? styles.statusOpenInfo
+                                : ''
+                            }`}
                           >
                             {alert.status}
-                            {alert.status === 'Resolved' && ' ✓'}
                           </span>
                         </td>
                       </tr>
@@ -191,7 +263,7 @@ const Alerts = () => {
                 {/* Pagination */}
                 <div className={styles.pagination}>
                   <span className={styles.paginationLabel}>
-                    Page {currentPage}-{totalPages}
+                    Page {safePage}-{totalPages}
                   </span>
                   <div className={styles.paginationButtons}>
                     <button
@@ -229,61 +301,56 @@ const Alerts = () => {
 
             {/* Right column - Details panel */}
             <div className={styles.rightColumn}>
-              <div className={styles.dateRangeRow}>
-                <select
-                  className={styles.dateSelect}
-                  value={dateRange}
-                  onChange={(e) => setDateRange(e.target.value)}
-                >
-                  <option>Last 28 days</option>
-                  <option>Last 7 days</option>
-                  <option>Last 14 days</option>
-                  <option>Last 90 days</option>
-                </select>
-                <select
-                  className={styles.dateSelect}
-                  value={dateRangeValue}
-                  onChange={(e) => setDateRangeValue(e.target.value)}
-                >
-                  <option>Dec 19, 2025 - Jan 15, 2026</option>
-                </select>
-              </div>
-
-              {/* Most affected area */}
-              <div className={styles.affectedCard}>
-                <div className={styles.affectedLabel}>Most affected area:</div>
-                <div className={styles.affectedContent}>
-                  <span className={styles.affectedText}>{mostAffectedArea.label}</span>
-                  <span className={styles.affectedPercent}>{mostAffectedArea.percentage}</span>
-                </div>
-              </div>
-
               {/* Selected alert details */}
               {selectedAlert && (
                 <div className={styles.detailCard}>
                   <div className={styles.detailHeader}>
-                    <span className={styles.detailIcon}>📈</span>
-                    <h3
-                      className={`${styles.detailTitle} ${
-                        selectedAlert.severity === 'Critical'
-                          ? styles.detailTitleCritical
-                          : selectedAlert.severity === 'Warning'
-                            ? styles.detailTitleWarning
-                            : ''
-                      }`}
-                    >
+                    <img src="/icons/Alert triangle.png" alt="" className={styles.detailIcon} width="20" height="20" />
+                    <h3 className={styles.detailTitle}>
                       {selectedAlert.alertName} Spike
                     </h3>
                   </div>
-                  <span
-                    className={`${styles.detailBadge} ${getSeverityClass(selectedAlert.severity)}`}
-                  >
-                    {selectedAlert.severity} | {selectedAlert.detailCategory}
-                  </span>
+                  <div className={styles.detailBadgeRow}>
+                    <span
+                      className={`${styles.detailBadgeCircle} ${
+                        selectedAlert.severity === 'Critical'
+                          ? styles.detailBadgeCircleRed
+                          : selectedAlert.severity === 'Warning'
+                            ? styles.detailBadgeCircleYellow
+                            : styles.detailBadgeCircleBlue
+                      }`}
+                    />
+                    <span className={`${styles.detailBadgeSeverity} ${selectedAlert.severity === 'Critical' ? styles.detailBadgeRed : selectedAlert.severity === 'Warning' ? styles.detailBadgeYellow : styles.detailBadgeBlue}`}>
+                      {selectedAlert.severity}
+                    </span>
+                    <span className={styles.detailBadgeSeparator} />
+                    <span className={styles.detailBadgeCategory}>{selectedAlert.detailCategory}</span>
+                  </div>
                   <p className={styles.detailDescription}>{selectedAlert.description}</p>
 
                   {/* Chart */}
                   <div className={styles.chartWrap}>
+                    <div className={styles.chartHeader}>
+                      <button
+                        type="button"
+                        className={styles.chartNavBtn}
+                        onClick={() => setChartMonthStart((s) => Math.max(0, s - 1))}
+                        disabled={chartMonthStart === 0}
+                        aria-label="Previous months"
+                      >
+                        ‹
+                      </button>
+                      <span className={styles.chartYearLabel}>{monthRangeLabel}</span>
+                      <button
+                        type="button"
+                        className={styles.chartNavBtn}
+                        onClick={() => setChartMonthStart((s) => Math.min(maxMonthStart, s + 1))}
+                        disabled={chartMonthStart >= maxMonthStart}
+                        aria-label="Next months"
+                      >
+                        ›
+                      </button>
+                    </div>
                     <svg
                       width={chartWidth}
                       height={chartHeight}
@@ -291,8 +358,8 @@ const Alerts = () => {
                       className={styles.chartSvg}
                     >
                       {/* Grid lines */}
-                      {[20, 40, 60].map((pct, i) => {
-                        const y = pad.top + innerH - (pct / 100) * innerH
+                      {[0.25, 0.5, 0.75].map((pct, i) => {
+                        const y = pad.top + innerH - pct * innerH
                         return (
                           <line
                             key={i}
@@ -300,7 +367,7 @@ const Alerts = () => {
                             y1={y}
                             x2={pad.left + innerW}
                             y2={y}
-                            stroke="#f3f4f6"
+                            stroke="#e5e7eb"
                             strokeWidth="1"
                           />
                         )
@@ -308,7 +375,7 @@ const Alerts = () => {
                       <path
                         d={linePath}
                         fill="none"
-                        stroke="#4f46e5"
+                        stroke="#dc2626"
                         strokeWidth="2"
                         strokeLinecap="round"
                         strokeLinejoin="round"
@@ -320,7 +387,7 @@ const Alerts = () => {
                           cy={p.y}
                           r="3"
                           fill="#fff"
-                          stroke="#4f46e5"
+                          stroke="#dc2626"
                           strokeWidth="2"
                         />
                       ))}
@@ -330,9 +397,20 @@ const Alerts = () => {
                           x={pad.left + (i / (chartLabels.length - 1 || 1)) * innerW}
                           y={chartHeight - 6}
                           textAnchor="middle"
-                          className={styles.chartLabel}
+                          className={styles.chartMonthLabel}
                         >
                           {l}
+                        </text>
+                      ))}
+                      {[0, 20, 40, 60, 80, 100].map((yVal) => (
+                        <text
+                          key={yVal}
+                          x={8}
+                          y={pad.top + innerH - (yVal / 100) * innerH + 4}
+                          textAnchor="start"
+                          className={styles.chartLabel}
+                        >
+                          {yVal}
                         </text>
                       ))}
                     </svg>
@@ -364,9 +442,11 @@ const Alerts = () => {
 
                   {/* Action buttons */}
                   <div className={styles.actionButtons}>
-                    <button className={styles.btnPrimary}>Acknowledges</button>
-                    <button className={styles.btnSecondary}>View visited metrics</button>
-                    <a href={selectedAlert.link} className={styles.btnLink}>
+                    <div className={styles.actionButtonsRow}>
+                      <button className={styles.btnPrimary}>Acknowledges</button>
+                      <button className={styles.btnSecondary}>View visited metrics</button>
+                    </div>
+                    <a href={selectedAlert.link} className={styles.btnLinkOutlined}>
                       Go to {selectedAlert.detailCategory} →
                     </a>
                   </div>

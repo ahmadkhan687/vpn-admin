@@ -11,7 +11,7 @@ const RealtimeReportSidebar = () => {
   // Determine initial expanded states based on current path
   const getInitialExpandedStates = () => {
     const sections = {
-      businessObjectives: true,
+      businessObjectives: false,
       networkProtocol: false,
       compliance: false,
     }
@@ -22,6 +22,11 @@ const RealtimeReportSidebar = () => {
       growthAndProductPerformance: false,
       networkHealth: false,
       protocolAndTrafficMix: false,
+    }
+    
+    // On KPI Summary page: all sections collapsed (user opens them manually)
+    if (pathname === '/kpi-summary') {
+      return { sections, subItems }
     }
     
     // Auto-expand based on current path
@@ -198,7 +203,9 @@ const RealtimeReportSidebar = () => {
       <div className={`${styles.realtimeSidebar} ${isMobile ? styles.mobileSidebar : ''} ${isMobile && !isOpen ? styles.sidebarClosed : ''}`}>
         <div className={styles.sidebarContent}>
           <div className={styles.sidebarHeader}>
-            <h2 className={styles.sidebarTitle}>Realtime Report</h2>
+            <Link href="/kpi-summary" className={styles.sidebarTitleLink}>
+              <h2 className={styles.sidebarTitle}>Realtime Report</h2>
+            </Link>
             {isMobile && (
               <button 
                 className={styles.closeButton}

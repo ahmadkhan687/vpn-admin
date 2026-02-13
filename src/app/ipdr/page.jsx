@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import Sidebar from '@/components/sidebar/Sidebar'
 import RealtimeReportSidebar from '@/components/realtime-report-sidebar/RealtimeReportSidebar'
 import Header from '@/components/header/Header'
+import DateRangePicker from '@/components/date-range-picker/DateRangePicker'
 import { ipdrData } from './ipdrData'
 import styles from './ipdr.module.css'
 
@@ -54,23 +55,14 @@ const ShieldIcon = () => (
 
 const IPDR = () => {
   const [selectedVPN, setSelectedVPN] = useState('Portfolio')
-  const [dateRange, setDateRange] = useState('Last 28 days')
-  const [isDateDropdownOpen, setIsDateDropdownOpen] = useState(false)
+  const [dateRange, setDateRange] = useState({
+    startDate: new Date(2025, 11, 19),
+    endDate: new Date(2026, 0, 15),
+  })
   const [accessTab, setAccessTab] = useState('daily') // 'daily' | 'weekly'
   const [monthStart, setMonthStart] = useState(0)
-  const dateDropdownRef = useRef(null)
   const accessChartRef = useRef(null)
   const [chartWidth, setChartWidth] = useState(500)
-
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (dateDropdownRef.current && !dateDropdownRef.current.contains(event.target)) {
-        setIsDateDropdownOpen(false)
-      }
-    }
-    document.addEventListener('mousedown', handleClickOutside)
-    return () => document.removeEventListener('mousedown', handleClickOutside)
-  }, [isDateDropdownOpen])
 
   useEffect(() => {
     const el = accessChartRef.current
@@ -85,15 +77,8 @@ const IPDR = () => {
   }, [])
 
   const scopeOptions = ['Portfolio', 'Steer Lucid', 'Crest', 'Slick', 'Fortivo', 'Qucik', 'Nexipher']
-  const dateRangeOptions = [
-    { label: 'Last 7 days', range: 'Jan 9, 2026 – Jan 15, 2026' },
-    { label: 'Last 14 days', range: 'Jan 2, 2026 – Jan 15, 2026' },
-    { label: 'Last 28 days', range: 'Dec 19, 2025 – Jan 15, 2026' },
-    { label: 'Last 90 days', range: 'Oct 18, 2025 – Jan 15, 2026' },
-  ]
 
   const handleVPNChange = (vpn) => setSelectedVPN(vpn)
-  const currentDateRange = dateRangeOptions.find((opt) => opt.label === dateRange) || dateRangeOptions[2]
   const vpnData = ipdrData[selectedVPN] || ipdrData.Portfolio
 
   const { kpis, accessCount, accessTrend, accessTrendDaily, accessTrendWeekly, integrity, logs } = vpnData
@@ -142,29 +127,12 @@ const IPDR = () => {
                 Is the system compliant with data retention policies, audit integrity standards, and legal response SLAs?
               </p>
             </div>
-            <div className={styles.pageHeaderRight} ref={dateDropdownRef}>
-              <div className={styles.dateRangeSelector} onClick={() => setIsDateDropdownOpen(!isDateDropdownOpen)}>
-                <span className={styles.dateRangeLabel}>{dateRange}</span>
-                <span className={styles.dateRangeValue}>{currentDateRange.range}</span>
-                <span className={styles.dateRangeChevron}>▼</span>
-              </div>
-              {isDateDropdownOpen && (
-                <div className={styles.dateRangeDropdown}>
-                  {dateRangeOptions.map((option) => (
-                    <div
-                      key={option.label}
-                      className={`${styles.dateRangeOption} ${dateRange === option.label ? styles.dateRangeOptionActive : ''}`}
-                      onClick={() => {
-                        setDateRange(option.label)
-                        setIsDateDropdownOpen(false)
-                      }}
-                    >
-                      <span className={styles.dateRangeOptionLabel}>{option.label}</span>
-                      <span className={styles.dateRangeOptionRange}>{option.range}</span>
-                    </div>
-                  ))}
-                </div>
-              )}
+            <div className={styles.pageHeaderRight}>
+              <DateRangePicker
+                value={dateRange}
+                onChange={setDateRange}
+                presets={['Last 7 days', 'Last 14 days', 'Last 28 days', 'Last 90 days']}
+              />
             </div>
           </div>
 
