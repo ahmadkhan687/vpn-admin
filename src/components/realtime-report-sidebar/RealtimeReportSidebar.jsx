@@ -42,7 +42,7 @@ const RealtimeReportSidebar = () => {
       sections.businessObjectives = true
       subItems.growthAndProductPerformance = true
     }
-    if (pathname === '/network-overview' || pathname === '/reliability-failure' || pathname === '/performance-quality' || pathname === '/region-health-state') {
+    if (pathname === '/network-overview' || pathname === '/reliability-failure' || pathname === '/performance-quality') {
       sections.networkProtocol = true
       subItems.networkHealth = true
     }
@@ -146,7 +146,6 @@ const RealtimeReportSidebar = () => {
             { name: 'Network Overview', path: '/network-overview' },
             { name: 'Reliability & Failures', path: '/reliability-failure' },
             { name: 'Performance & Quality', path: '/performance-quality' },
-            { name: 'Region Health State', path: '/region-health-state' },
           ],
         },
         {

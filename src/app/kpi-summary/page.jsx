@@ -1586,12 +1586,12 @@ const KPISummary = () => {
           {activeTab === 'Live Sessions' && (
             <div className={styles.liveSessionsContainer}>
               <div className={styles.liveSessionsRow}>
-                {/* Box 1: Last 5 minute updated */}
+                {/* Box 1: Average User Visit */}
                 <div className={styles.liveSessionCard}>
                   <div className={styles.liveSessionValueRow}>
                     <div className={styles.liveSessionValueContainer}>
                       <div className={styles.liveSessionValue}>{currentLiveSessionsData?.last5MinUpdated || '980'}</div>
-                      <div className={styles.liveSessionTitle}>Last 5 minute updated</div>
+                      <div className={styles.liveSessionTitle}>Average User Visit</div>
                     </div>
                     <div className={`${styles.liveSessionIcon} ${styles.liveSessionIconPurple}`}>
                       <img src="/icons/users.png" alt="Users" width="24" height="24" />
