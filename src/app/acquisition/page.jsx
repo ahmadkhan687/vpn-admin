@@ -1,138 +1,24 @@
 'use client'
 
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, useMemo } from 'react'
 import Link from 'next/link'
 import { PieChart } from '@mui/x-charts/PieChart'
 import Sidebar from '@/components/sidebar/Sidebar'
 import RealtimeReportSidebar from '@/components/realtime-report-sidebar/RealtimeReportSidebar'
 import DateRangePicker from '@/components/date-range-picker/DateRangePicker'
 import Header from '@/components/header/Header'
+import { fetchAcquisitionUsers } from './acquisitionApi'
+import {
+  getUserTypeData,
+  getDeviceDataByUserType,
+  getSubscriptionData,
+  getMonitoredUsersByType,
+  getAllUsersTableByType,
+} from './acquisitionUtils'
 import styles from './acquisition.module.css'
 
-// Many months so the graph scrolls horizontally; values go up and down for a realistic trend
 const GROWTH_MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec']
-
-// Per user type: display values (New Users, Frequent Users) and trend data for the graph. "all" = total.
-const userTypeData = {
-  all: {
-    newUsers: 233,
-    frequentUsers: 222,
-    newUsersTrend: [520, 380, 610, 450, 720, 580, 680, 790, 640, 820, 710, 850],
-    frequentUsersTrend: [420, 280, 520, 350, 640, 480, 560, 720, 490, 680, 590, 750],
-  },
-  free: {
-    newUsers: 142,
-    frequentUsers: 98,
-    newUsersTrend: [320, 220, 380, 280, 420, 350, 400, 480, 380, 520, 440, 550],
-    frequentUsersTrend: [280, 180, 320, 220, 380, 290, 350, 420, 340, 450, 380, 480],
-  },
-  paid: {
-    newUsers: 68,
-    frequentUsers: 95,
-    newUsersTrend: [140, 100, 160, 120, 200, 160, 190, 220, 180, 210, 200, 230],
-    frequentUsersTrend: [90, 70, 95, 85, 110, 120, 130, 140, 125, 150, 140, 160],
-  },
-  trial: {
-    newUsers: 23,
-    frequentUsers: 29,
-    newUsersTrend: [60, 60, 50, 50, 100, 70, 90, 90, 80, 90, 70, 70],
-    frequentUsersTrend: [50, 30, 105, 45, 150, 70, 110, 160, 45, 80, 100, 110],
-  },
-}
-
-// Device breakdown per user type (for right-side "Users Based on Devices" pie only).
-const deviceDataByUserType = {
-  all: [
-    { id: 'Android', value: 38, color: '#9acd32' },
-    { id: 'Windows', value: 27, color: '#87ceeb' },
-    { id: 'iOS', value: 20, color: '#e07c24' },
-    { id: 'Other', value: 10, color: '#b794f6' },
-    { id: 'Linux', value: 5, color: '#daa520' },
-  ],
-  free: [
-    { id: 'Android', value: 42, color: '#9acd32' },
-    { id: 'Windows', value: 24, color: '#87ceeb' },
-    { id: 'iOS', value: 18, color: '#e07c24' },
-    { id: 'Other', value: 12, color: '#b794f6' },
-    { id: 'Linux', value: 4, color: '#daa520' },
-  ],
-  paid: [
-    { id: 'Android', value: 30, color: '#9acd32' },
-    { id: 'Windows', value: 32, color: '#87ceeb' },
-    { id: 'iOS', value: 25, color: '#e07c24' },
-    { id: 'Other', value: 8, color: '#b794f6' },
-    { id: 'Linux', value: 5, color: '#daa520' },
-  ],
-  trial: [
-    { id: 'Android', value: 35, color: '#9acd32' },
-    { id: 'iOS', value: 28, color: '#e07c24' },
-    { id: 'Windows', value: 22, color: '#87ceeb' },
-    { id: 'Other', value: 10, color: '#b794f6' },
-    { id: 'Linux', value: 5, color: '#daa520' },
-  ],
-}
-
-// Users Per Subscription section: user count + bar chart per All/Free/Paid/Trial. All 12 months.
-const subscriptionData = {
-  all: { users: 234, barData: [6, 8, 4, 10, 8, 12, 22, 14, 3, 6, 4, 22] },
-  free: { users: 142, barData: [4, 5, 2, 6, 5, 8, 14, 9, 2, 4, 3, 14] },
-  paid: { users: 68, barData: [1, 2, 1, 3, 2, 3, 6, 4, 1, 1, 1, 6] },
-  trial: { users: 24, barData: [1, 1, 1, 1, 1, 1, 2, 1, 0, 1, 0, 2] },
-}
-
 const SUBSCRIPTION_BAR_MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-
-// Monitored users per type - table updates when dropdown selection changes
-const monitoredUsersDataByType = {
-  all: [
-    { name: 'iQtzlb', status: 'Free', lastActive: '18-January-2026 (06:58 AM)' },
-    { name: 'itWzlb', status: 'Free', lastActive: '18-January-2026 (06:58 AM)' },
-    { name: 'itFzlb', status: 'Paid', lastActive: '17-January-2026 (02:15 PM)' },
-    { name: 'iDStzlb', status: 'Free', lastActive: '18-January-2026 (06:58 AM)' },
-    { name: 'itzlb', status: 'Trial', lastActive: '16-January-2026 (11:22 AM)' },
-  ],
-  free: [
-    { name: 'iQtzlb', status: 'Free', lastActive: '18-January-2026 (06:58 AM)' },
-    { name: 'itWzlb', status: 'Free', lastActive: '18-January-2026 (06:58 AM)' },
-    { name: 'iDStzlb', status: 'Free', lastActive: '18-January-2026 (06:58 AM)' },
-    { name: 'xYzlb', status: 'Free', lastActive: '15-January-2026 (09:30 AM)' },
-  ],
-  paid: [
-    { name: 'itFzlb', status: 'Paid', lastActive: '17-January-2026 (02:15 PM)' },
-    { name: 'pAid1', status: 'Paid', lastActive: '18-January-2026 (08:20 AM)' },
-    { name: 'pAid2', status: 'Paid', lastActive: '14-January-2026 (04:45 PM)' },
-  ],
-  trial: [
-    { name: 'itzlb', status: 'Trial', lastActive: '16-January-2026 (11:22 AM)' },
-    { name: 'tr1al', status: 'Trial', lastActive: '18-January-2026 (01:10 PM)' },
-    { name: 'tr2al', status: 'Trial', lastActive: '12-January-2026 (10:00 AM)' },
-  ],
-}
-
-// All Users table section - full table with Email, Device, Profile/History button
-const allUsersTableDataByType = {
-  all: [
-    { name: 'itzlb', status: 'Free', email: 'eedbb003124b66da@nexipher.com', device: 'a03', lastActive: '18-January-2026 (06:58 AM)' },
-    { name: 'iQtzlb', status: 'Free', email: 'a1b2c3d4@nexipher.com', device: 'a01', lastActive: '18-January-2026 (06:58 AM)' },
-    { name: 'itWzlb', status: 'Free', email: 'e5f6g7h8@nexipher.com', device: 'a02', lastActive: '18-January-2026 (06:58 AM)' },
-    { name: 'itFzlb', status: 'Paid', email: 'i9j0k1l2@nexipher.com', device: 'b01', lastActive: '17-January-2026 (02:15 PM)' },
-    { name: 'iDStzlb', status: 'Free', email: 'm3n4o5p6@nexipher.com', device: 'a04', lastActive: '18-January-2026 (06:58 AM)' },
-    { name: 'tr1al', status: 'Trial', email: 'q7r8s9t0@nexipher.com', device: 'c01', lastActive: '18-January-2026 (01:10 PM)' },
-  ],
-  free: [
-    { name: 'itzlb', status: 'Free', email: 'eedbb003124b66da@nexipher.com', device: 'a03', lastActive: '18-January-2026 (06:58 AM)' },
-    { name: 'iQtzlb', status: 'Free', email: 'a1b2c3d4@nexipher.com', device: 'a01', lastActive: '18-January-2026 (06:58 AM)' },
-    { name: 'itWzlb', status: 'Free', email: 'e5f6g7h8@nexipher.com', device: 'a02', lastActive: '18-January-2026 (06:58 AM)' },
-  ],
-  paid: [
-    { name: 'itFzlb', status: 'Paid', email: 'i9j0k1l2@nexipher.com', device: 'b01', lastActive: '17-January-2026 (02:15 PM)' },
-    { name: 'pAid1', status: 'Paid', email: 'paid1@nexipher.com', device: 'b02', lastActive: '18-January-2026 (08:20 AM)' },
-  ],
-  trial: [
-    { name: 'tr1al', status: 'Trial', email: 'q7r8s9t0@nexipher.com', device: 'c01', lastActive: '18-January-2026 (01:10 PM)' },
-    { name: 'itzlb', status: 'Trial', email: 'trial2@nexipher.com', device: 'c02', lastActive: '16-January-2026 (11:22 AM)' },
-  ],
-}
 
 const Acquisition = () => {
   const [selectedVPN, setSelectedVPN] = useState('Portfolio')
@@ -150,11 +36,35 @@ const Acquisition = () => {
   const [allUsersTableType, setAllUsersTableType] = useState('all')
   const [isAllUsersDropdownOpen, setIsAllUsersDropdownOpen] = useState(false)
   const [isDeviceDropdownOpen, setIsDeviceDropdownOpen] = useState(false)
+  const [users, setUsers] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
   const userTypeDropdownRef = useRef(null)
   const subscriptionDropdownRef = useRef(null)
   const monitoredDropdownRef = useRef(null)
   const allUsersDropdownRef = useRef(null)
   const deviceDropdownRef = useRef(null)
+
+  // Fetch users from API (real-time data) - main array of users with details
+  useEffect(() => {
+    setLoading(true)
+    setError(null)
+    fetchAcquisitionUsers({
+      vpn: selectedVPN,
+      startDate: dateRange?.startDate,
+      endDate: dateRange?.endDate,
+    })
+      .then(({ users: fetchedUsers }) => setUsers(fetchedUsers || []))
+      .catch((err) => setError(err?.message || 'Failed to load acquisition data'))
+      .finally(() => setLoading(false))
+  }, [selectedVPN, dateRange?.startDate?.getTime?.(), dateRange?.endDate?.getTime?.()])
+
+  // Derive display data from users array (each user has full details)
+  const userTypeData = useMemo(() => getUserTypeData(users), [users])
+  const deviceDataByUserType = useMemo(() => getDeviceDataByUserType(users), [users])
+  const subscriptionData = useMemo(() => getSubscriptionData(users), [users])
+  const monitoredUsersDataByType = useMemo(() => getMonitoredUsersByType(users), [users])
+  const allUsersTableDataByType = useMemo(() => getAllUsersTableByType(users), [users])
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -315,6 +225,45 @@ const Acquisition = () => {
         <text x={barWidth - 8} y={pad.top + innerH - (24 / barMax) * innerH + 4} textAnchor="end" className={styles.subscriptionBarAxisLabel}>24</text>
         <text x={barWidth - 8} y={pad.top + 4} textAnchor="end" className={styles.subscriptionBarAxisLabel}>30</text>
       </svg>
+    )
+  }
+
+  if (loading) {
+    return (
+      <div className={`${styles.dashboardContainer} ${styles.withRealtimeSidebar}`}>
+        <Sidebar />
+        <RealtimeReportSidebar />
+        <div className={styles.mainContent}>
+          <Header
+            dropdownOptions={scopeOptions}
+            defaultValue={selectedVPN}
+            onValueChange={handleVPNChange}
+          />
+          <div className={styles.content} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: 400 }}>
+            <div className={styles.loadingSpinner} aria-hidden="true" />
+            <span style={{ marginLeft: 12 }}>Loading acquisition data…</span>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className={`${styles.dashboardContainer} ${styles.withRealtimeSidebar}`}>
+        <Sidebar />
+        <RealtimeReportSidebar />
+        <div className={styles.mainContent}>
+          <Header
+            dropdownOptions={scopeOptions}
+            defaultValue={selectedVPN}
+            onValueChange={handleVPNChange}
+          />
+          <div className={styles.content} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: 400, color: '#b91c1c', flexDirection: 'column', gap: 8 }}>
+            <span>{error}</span>
+          </div>
+        </div>
+      </div>
     )
   }
 
@@ -650,7 +599,7 @@ const Acquisition = () => {
                       <td className={styles.allUsersTd}>{row.lastActive}</td>
                       <td className={styles.allUsersTd}>
                         <Link
-                          href={`/acquisition/profile/${encodeURIComponent(row.name)}?name=${encodeURIComponent(row.name)}&email=${encodeURIComponent(row.email)}&device=${encodeURIComponent(row.device)}&country=${encodeURIComponent(row.country || '—')}&status=${encodeURIComponent(row.status)}`}
+                          href={`/acquisition/profile/${row.id != null ? row.id : encodeURIComponent(row.name)}?name=${encodeURIComponent(row.name)}&email=${encodeURIComponent(row.email)}&device=${encodeURIComponent(row.device)}&country=${encodeURIComponent(row.country || '—')}&status=${encodeURIComponent(row.status)}`}
                           className={styles.profileHistoryBtn}
                         >
                           Profile/History

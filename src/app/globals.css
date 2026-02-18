@@ -62,6 +62,7 @@ body {
   background: #f5f7fa;
   color: #1a1a1a;
   font-family: 'Poppins', sans-serif;
+  overflow-x: hidden;
 }
 
 /* Utility classes for Dashboard look */
@@ -124,4 +125,163 @@ a {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+}
+
+/* Responsive typography - scale font sizes when viewport shrinks (layout unchanged) */
+html {
+  font-size: clamp(12px, 0.9vw + 11px, 16px);
+}
+
+/* Responsive font scaling via CSS custom properties */
+:root {
+  --responsive-scale: 1;
+}
+
+@media (max-width: 1600px) {
+  :root {
+    --responsive-scale: 0.97;
+  }
+}
+
+@media (max-width: 1400px) {
+  :root {
+    --responsive-scale: 0.93;
+  }
+  
+  html {
+    font-size: clamp(11px, 0.85vw + 10px, 15px);
+  }
+}
+
+@media (max-width: 1200px) {
+  :root {
+    --responsive-scale: 0.88;
+  }
+  
+  html {
+    font-size: clamp(11px, 0.8vw + 9px, 14px);
+  }
+}
+
+@media (max-width: 1024px) {
+  :root {
+    --responsive-scale: 0.82;
+  }
+  
+  html {
+    font-size: clamp(10px, 0.75vw + 9px, 13px);
+  }
+}
+
+@media (max-width: 768px) {
+  :root {
+    --responsive-scale: 0.78;
+  }
+  
+  html {
+    font-size: clamp(10px, 0.7vw + 8px, 12px);
+  }
+}
+
+@media (max-width: 480px) {
+  :root {
+    --responsive-scale: 0.72;
+  }
+  
+  html {
+    font-size: clamp(9px, 0.65vw + 7px, 11px);
+  }
+}
+
+@media (max-width: 360px) {
+  :root {
+    --responsive-scale: 0.68;
+  }
+  
+  html {
+    font-size: clamp(8px, 0.6vw + 6px, 10px);
+  }
+}
+
+/* Scale typography for common UI patterns (matches CSS module class names) - explicit px for predictable scaling */
+@media (max-width: 1400px) {
+  [class*="pageTitle"] { font-size: 22px !important; }
+  [class*="sectionTitle"] { font-size: 22px !important; }
+  [class*="pageDescription"] { font-size: 13px !important; }
+  [class*="kpiValue"] { font-size: 28px !important; }
+  [class*="kpiTitle"] { font-size: 13px !important; }
+  [class*="axisLabel"] { font-size: 11px !important; }
+  [class*="chartAxisLabel"] { font-size: 11px !important; }
+  [class*="itemText"] { font-size: 12px !important; }
+  [class*="subItemText"] { font-size: 11px !important; }
+}
+
+@media (max-width: 1200px) {
+  [class*="pageTitle"] { font-size: 20px !important; }
+  [class*="sectionTitle"] { font-size: 20px !important; }
+  [class*="pageDescription"] { font-size: 12px !important; }
+  [class*="kpiValue"] { font-size: 26px !important; }
+  [class*="kpiTitle"] { font-size: 12px !important; }
+  [class*="axisLabel"] { font-size: 10px !important; }
+  [class*="chartAxisLabel"] { font-size: 10px !important; }
+  [class*="sidebarTitle"] { font-size: 16px !important; }
+  [class*="subItemText"] { font-size: 10px !important; }
+  [class*="itemText"] { font-size: 11px !important; }
+}
+
+@media (max-width: 1024px) {
+  [class*="pageTitle"] { font-size: 18px !important; }
+  [class*="sectionTitle"] { font-size: 18px !important; }
+  [class*="pageDescription"] { font-size: 11px !important; }
+  [class*="kpiValue"] { font-size: 24px !important; }
+  [class*="kpiTitle"] { font-size: 11px !important; }
+  [class*="axisLabel"] { font-size: 9px !important; }
+  [class*="chartAxisLabel"] { font-size: 9px !important; }
+  [class*="sidebarTitle"] { font-size: 15px !important; }
+  [class*="metricCardTitle"] { font-size: 13px !important; }
+  [class*="triggerText"] { font-size: 12px !important; }
+  [class*="itemText"] { font-size: 11px !important; }
+  [class*="subItemText"] { font-size: 10px !important; }
+}
+
+@media (max-width: 768px) {
+  [class*="pageTitle"] { font-size: 16px !important; }
+  [class*="sectionTitle"] { font-size: 16px !important; }
+  [class*="pageDescription"] { font-size: 10px !important; }
+  [class*="kpiValue"] { font-size: 20px !important; }
+  [class*="kpiTitle"] { font-size: 10px !important; }
+  [class*="axisLabel"] { font-size: 9px !important; }
+  [class*="chartAxisLabel"] { font-size: 9px !important; }
+  [class*="sidebarTitle"] { font-size: 14px !important; }
+  [class*="navText"] { font-size: 11px !important; }
+  [class*="dateRangeLabel"] { font-size: 11px !important; }
+  [class*="dateRangeValue"] { font-size: 11px !important; }
+  [class*="itemText"] { font-size: 10px !important; }
+  [class*="subItemText"] { font-size: 9px !important; }
+}
+
+@media (max-width: 480px) {
+  [class*="pageTitle"] { font-size: 14px !important; }
+  [class*="sectionTitle"] { font-size: 14px !important; }
+  [class*="pageDescription"] { font-size: 9px !important; }
+  [class*="kpiValue"] { font-size: 18px !important; }
+  [class*="kpiTitle"] { font-size: 9px !important; }
+  [class*="axisLabel"] { font-size: 8px !important; }
+  [class*="chartAxisLabel"] { font-size: 8px !important; }
+  [class*="sidebarTitle"] { font-size: 13px !important; }
+  [class*="itemText"] { font-size: 9px !important; }
+  [class*="subItemText"] { font-size: 8px !important; }
+}
+
+/* Text overflow - prevent content from breaking out of boxes */
+[class*="pageTitle"],
+[class*="sectionTitle"],
+[class*="pageDescription"],
+[class*="kpiValue"],
+[class*="kpiTitle"],
+[class*="subItemText"],
+[class*="itemText"] {
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  max-width: 100%;
 }
