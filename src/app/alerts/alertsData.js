@@ -97,9 +97,10 @@ export const mostAffectedAreaByVPN = {
   Nexipher: { label: 'Network Health', percentage: '9.1%' },
 }
 
-// Convert alerts to dashboard home page format: { title, description, level, link }
+// Convert alerts to dashboard home page format: { id, title, description, level, link }
 export const alertsToDashboardFormat = (alerts) =>
   (alerts || []).map((a) => ({
+    id: a.id,
     title: `${a.alertName}${a.alertRegion ? ` - ${a.alertRegion}` : ''}`,
     description: a.description,
     level: a.severity === 'Critical' ? 'High Alert' : a.severity === 'Warning' ? 'Medium Level Alert' : 'Informational',

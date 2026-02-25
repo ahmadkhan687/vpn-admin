@@ -126,9 +126,9 @@
   padding-left: 24px;
 }
 
-/* .kpiRow1Card:not(:last-child) {
+.kpiRow1Card:not(:last-child) {
   padding-right: 24px;
-} */
+}
 
 .kpiRow1Card:not(:last-child)::after {
   content: '';
@@ -176,9 +176,9 @@
   padding-left: 24px;
 }
 
-/* .kpiRow2Card:not(:last-child) {
+.kpiRow2Card:not(:last-child) {
   padding-right: 24px;
-} */
+}
 
 .kpiRow2Card:not(:last-child)::after {
   content: '';

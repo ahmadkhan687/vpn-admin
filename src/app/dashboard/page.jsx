@@ -514,14 +514,19 @@ const Dashboard = () => {
                   </div>
                 </div>
                 <div className={styles.alertsList}>
-                  {alerts.map((alert, index) => (
-                    <div key={index} className={styles.alertItem}>
+                  {alerts.slice(0, 5).map((alert, index) => (
+                    <div key={alert.id ?? index} className={styles.alertItem}>
                       <div className={styles.alertContent}>
                         <div className={styles.alertTitle}>{alert.title}</div>
                         <div className={styles.alertDescription}>
                           {alert.description}
                         </div>
-                        <a href="/alerts" className={styles.alertLink}>
+                        <a
+                          href={`/alerts?vpn=${encodeURIComponent(selectedVPN)}${
+                            alert.id != null ? `&alertId=${encodeURIComponent(alert.id)}` : ''
+                          }`}
+                          className={styles.alertLink}
+                        >
                           {alert.link} →
                         </a>
                       </div>

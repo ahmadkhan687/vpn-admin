@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
+import { useSearchParams } from 'next/navigation'
 import Sidebar from '@/components/sidebar/Sidebar'
 import Header from '@/components/header/Header'
 import DateRangePicker from '@/components/date-range-picker/DateRangePicker'
@@ -35,7 +36,12 @@ const expandTo12Months = (arr) => {
 }
 
 const Alerts = () => {
-  const [selectedVPN, setSelectedVPN] = useState('Portfolio')
+  const searchParams = useSearchParams()
+  const vpnFromQuery = searchParams.get('vpn')
+  const alertIdFromQuery = searchParams.get('alertId')
+  const initialVPN = scopeOptions.includes(vpnFromQuery) ? vpnFromQuery : 'Portfolio'
+
+  const [selectedVPN, setSelectedVPN] = useState(initialVPN)
   const [filterTab, setFilterTab] = useState('all') // 'all' | 'critical'
   const vpnAlerts = alertsByVPN[selectedVPN] || alertsByVPN.Portfolio
   const [selectedAlert, setSelectedAlert] = useState(vpnAlerts[0] || null)
@@ -46,10 +52,18 @@ const Alerts = () => {
   const [currentPage, setCurrentPage] = useState(1)
 
   useEffect(() => {
-    const alerts = alertsByVPN[selectedVPN] || alertsByVPN.Portfolio
-    setSelectedAlert(alerts[0] || null)
+    const alertsForVpn = alertsByVPN[selectedVPN] || alertsByVPN.Portfolio
+    const idFromQuery = searchParams.get('alertId')
+
+    if (idFromQuery) {
+      const match = alertsForVpn.find((a) => String(a.id) === String(idFromQuery))
+      setSelectedAlert(match || alertsForVpn[0] || null)
+    } else {
+      setSelectedAlert(alertsForVpn[0] || null)
+    }
+
     setCurrentPage(1)
-  }, [selectedVPN])
+  }, [selectedVPN, searchParams])
 
   const [chartMonthStart, setChartMonthStart] = useState(0) // 0-7, show 5 months at a time
   const itemsPerPage = 7
