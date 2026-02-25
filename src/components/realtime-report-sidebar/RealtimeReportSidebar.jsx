@@ -50,6 +50,9 @@ const RealtimeReportSidebar = () => {
       sections.networkProtocol = true
       subItems.protocolAndTrafficMix = true
     }
+    if (pathname === '/ipdr' || pathname === '/retention-compliance') {
+      sections.compliance = true
+    }
     
     return { sections, subItems }
   }
@@ -163,14 +166,8 @@ const RealtimeReportSidebar = () => {
       id: 'compliance',
       title: 'Compliance & Governance',
       items: [
-        {
-          name: 'Compliance & Governance',
-          id: 'complianceItems',
-          subItems: [
-            { name: 'IPDR', path: '/ipdr' },
-            { name: 'Retention Compliance', path: '/retention-compliance' },
-          ],
-        },
+        { name: 'IPDR', path: '/ipdr' },
+        { name: 'Retention Compliance', path: '/retention-compliance' },
       ],
     },
   ]
